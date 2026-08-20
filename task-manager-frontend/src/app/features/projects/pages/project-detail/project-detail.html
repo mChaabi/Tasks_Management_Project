@@ -1,0 +1,21 @@
+<div class="detail-container" *ngIf="project">
+  <a routerLink="/projects" class="back-link">← Volver a proyectos</a>
+
+  <div class="detail-card">
+    <div class="detail-header">
+      <h1>{{ project.title }}</h1>
+      <span class="status-badge" [ngClass]="project.status.toLowerCase()">
+        {{ project.status }}
+      </span>
+    </div>
+
+    <p class="description">{{ project.description }}</p>
+
+    <div class="detail-info">
+      <div>
+        <small>Fecha de creación</small>
+        <p>{{ project.createdAt | date:'mediumDate' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

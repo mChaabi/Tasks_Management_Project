@@ -1,0 +1,20 @@
+<nav class="navbar" *ngIf="isLoggedIn()">
+  <div class="navbar-container">
+    <div class="brand" routerLink="/projects">
+      <span class="logo-icon">⚡</span>
+      <span class="brand-name">TaskManager</span>
+    </div>
+
+    <ul class="nav-links">
+      <li>
+        <a routerLink="/projects" routerLinkActive="active">Projets</a>
+      </li>
+    </ul>
+
+    <div class="user-actions">
+      <button class="btn-logout" (click)="logout()">
+        <span>Déconnexion</span>
+      </button>
+    </div>
+  </div>
+</nav>
