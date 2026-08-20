@@ -1,5 +1,8 @@
 package com.tasks.task_manager_BackEnd.user;
 
+import com.tasks.task_manager_BackEnd.comment.Comment;
+import com.tasks.task_manager_BackEnd.project.Project;
+import com.tasks.task_manager_BackEnd.task.Task;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +29,11 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private Role role = Role.DEVELOPER;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude

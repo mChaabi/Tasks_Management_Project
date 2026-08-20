@@ -1,5 +1,6 @@
 package com.tasks.task_manager_BackEnd.project;
 
+import com.tasks.task_manager_BackEnd.task.Task;
 import com.tasks.task_manager_BackEnd.user.User;
 import jakarta.persistence.*;
 import lombok.*;
