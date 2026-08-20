@@ -1,0 +1,23 @@
+<div class="list-container">
+  <h2>Lista de Tareas</h2>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <td>{{ task.title }}</td>
+          <td>{{ task.description }}</td>
+          <td>
+            <span class="badge" [ngClass]="task.status.toLowerCase()">{{ task.status }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

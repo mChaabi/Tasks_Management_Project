@@ -1,0 +1,84 @@
+<div class="board-container">
+  <div class="board-header">
+    <h2>Tablero de Tareas</h2>
+    <button class="btn-primary" (click)="openModal()">+ Nueva Tarea</button>
+  </div>
+
+  <div class="columns-grid">
+    <!-- Columna POR HACER -->
+    <div class="column">
+      <div class="column-header todo">
+        <span>POR HACER</span>
+        <span class="count">{{ getTasksByStatus('TODO').length }}</span>
+      </div>
+      <div class="task-list">
+        <div *ngFor="let task of getTasksByStatus('TODO')" class="task-card">
+          <h4>{{ task.title }}</h4>
+          <p>{{ task.description }}</p>
+          <div class="card-actions">
+            <button (click)="changeStatus(task.id!, 'IN_PROGRESS')">→ Proceso</button>
+            <button class="btn-del" (click)="deleteTask(task.id!)">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna EN PROGRESO -->
+    <div class="column">
+      <div class="column-header in-progress">
+        <span>EN PROGRESO</span>
+        <span class="count">{{ getTasksByStatus('IN_PROGRESS').length }}</span>
+      </div>
+      <div class="task-list">
+        <div *ngFor="let task of getTasksByStatus('IN_PROGRESS')" class="task-card">
+          <h4>{{ task.title }}</h4>
+          <p>{{ task.description }}</p>
+          <div class="card-actions">
+            <button (click)="changeStatus(task.id!, 'TODO')">← Pendiente</button>
+            <button (click)="changeStatus(task.id!, 'DONE')">→ Hecho</button>
+            <button class="btn-del" (click)="deleteTask(task.id!)">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna COMPLETADO -->
+    <div class="column">
+      <div class="column-header done">
+        <span>COMPLETADO</span>
+        <span class="count">{{ getTasksByStatus('DONE').length }}</span>
+      </div>
+      <div class="task-list">
+        <div *ngFor="let task of getTasksByStatus('DONE')" class="task-card">
+          <h4>{{ task.title }}</h4>
+          <p>{{ task.description }}</p>
+          <div class="card-actions">
+            <button (click)="changeStatus(task.id!, 'IN_PROGRESS')">← Proceso</button>
+            <button class="btn-del" (click)="deleteTask(task.id!)">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Crear Tarea -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h3>Nueva Tarea</h3>
+      <form [formGroup]="taskForm" (ngSubmit)="createTask()">
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" formControlName="title" placeholder="Título de la tarea" />
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea formControlName="description" rows="3" placeholder="Detalles..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="taskForm.invalid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

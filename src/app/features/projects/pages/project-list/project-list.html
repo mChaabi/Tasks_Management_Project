@@ -1,0 +1,59 @@
+<div class="projects-container">
+  <div class="header">
+    <div>
+      <h1>Proyectos</h1>
+      <p>Gestiona todos tus proyectos en un solo lugar</p>
+    </div>
+    <button class="btn-primary" (click)="openModal()">+ Nuevo Proyecto</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loader-container">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="!isLoading && projects.length === 0" class="empty-state">
+    <p>No hay proyectos registrados. ¡Crea el primero!</p>
+  </div>
+
+  <div *ngIf="!isLoading && projects.length > 0" class="projects-grid">
+    <div *ngFor="let project of projects" class="project-card" [routerLink]="['/projects', project.id]">
+      <div class="card-header">
+        <span class="status-badge" [ngClass]="project.status.toLowerCase()">
+          {{ project.status }}
+        </span>
+        <button class="btn-delete" (click)="deleteProject(project.id!, $event)">🗑️</button>
+      </div>
+      <h3>{{ project.title }}</h3>
+      <p class="description">{{ project.description }}</p>
+    </div>
+  </div>
+
+  <!-- Modal Crear Proyecto -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h2>Crear Nuevo Proyecto</h2>
+      <form [formGroup]="projectForm" (ngSubmit)="createProject()">
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" formControlName="title" placeholder="Nombre del proyecto" />
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea formControlName="description" rows="3" placeholder="Detalles del proyecto"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select formControlName="status">
+            <option value="PLANNED">Planificado</option>
+            <option value="IN_PROGRESS">En Progreso</option>
+            <option value="COMPLETED">Completado</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="projectForm.invalid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
