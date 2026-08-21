@@ -1,15 +1,26 @@
-// features/calendar/calendar.component.ts
 import { Component, OnInit, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Task } from '../tasks/models/task.model';
 import { TaskService } from '../tasks/services/task';
+import { Project } from '../projects/models/project.model';
+import { ProjectService } from '../projects/services/project';
+import { forkJoin } from 'rxjs';
+
+export interface CalendarItem {
+  id: number;
+  title: string;
+  type: 'TASK' | 'PROJECT';
+  date: Date;
+  status?: string;
+  projectId?: number; // Présent si c'est une tâche
+}
 
 interface CalendarDay {
   date: Date;
   inCurrentMonth: boolean;
   isToday: boolean;
-  tasks: Task[];
+  items: CalendarItem[];
 }
 
 @Component({
@@ -21,9 +32,10 @@ interface CalendarDay {
 })
 export class CalendarComponent implements OnInit {
   private taskService = inject(TaskService);
+  private projectService = inject(ProjectService);
   private router = inject(Router);
 
-  private allTasks = signal<Task[]>([]);
+  private allItems = signal<CalendarItem[]>([]);
   currentDate = signal(new Date());
   selectedDay = signal<CalendarDay | null>(null);
 
@@ -39,7 +51,6 @@ export class CalendarComponent implements OnInit {
     const month = date.getMonth();
 
     const firstDay = new Date(year, month, 1);
-    // Lundi = 0 ... Dimanche = 6
     const startOffset = (firstDay.getDay() + 6) % 7;
 
     const gridStart = new Date(year, month, 1 - startOffset);
@@ -54,25 +65,48 @@ export class CalendarComponent implements OnInit {
         date: d,
         inCurrentMonth: d.getMonth() === month,
         isToday: d.toDateString() === today.toDateString(),
-        tasks: this.getTasksForDate(d)
+        items: this.getItemsForDate(d)
       });
     }
     return days;
   });
 
   ngOnInit(): void {
-    this.taskService.getAllTasksForUser().subscribe({
-      next: (tasks) => this.allTasks.set(tasks),
-      error: (err) => console.error('Error al cargar tareas del calendario:', err)
+    // Charge les tâches ET les projets simultanément
+    forkJoin({
+      tasks: this.taskService.getAllTasksForUser(),
+      projects: this.projectService.getAllProjects()
+    }).subscribe({
+      next: ({ tasks, projects }) => {
+        const mappedTasks: CalendarItem[] = tasks
+          .filter(t => t.dueDate)
+          .map(t => ({
+            id: t.id!,
+            title: t.title,
+            type: 'TASK',
+            date: new Date(t.dueDate!),
+            status: t.status,
+            projectId: t.projectId
+          }));
+
+        const mappedProjects: CalendarItem[] = projects
+          .filter(p => p.createdAt) // Ou la propriété de date souhaitée
+          .map(p => ({
+            id: p.id!,
+            title: p.title,
+            type: 'PROJECT',
+            date: new Date(p.createdAt!),
+            status: p.status
+          }));
+
+        this.allItems.set([...mappedTasks, ...mappedProjects]);
+      },
+      error: (err) => console.error('Error al cargar datos del calendario:', err)
     });
   }
 
-  private getTasksForDate(date: Date): Task[] {
-    return this.allTasks().filter(t => {
-      if (!t.dueDate) return false;
-      const due = new Date(t.dueDate);
-      return due.toDateString() === date.toDateString();
-    });
+  private getItemsForDate(date: Date): CalendarItem[] {
+    return this.allItems().filter(item => item.date.toDateString() === date.toDateString());
   }
 
   prevMonth(): void {
@@ -88,16 +122,14 @@ export class CalendarComponent implements OnInit {
   }
 
   selectDay(day: CalendarDay): void {
-    this.selectedDay.set(day.tasks.length > 0 ? day : null);
+    this.selectedDay.set(day.items.length > 0 ? day : null);
   }
 
-  goToProject(projectId: number): void {
-    this.router.navigate(['/projects', projectId]);
-  }
-
-  isUrgent(task: Task): boolean {
-    if (!task.dueDate || task.status === 'COMPLETED') return false;
-    const diffHours = (new Date(task.dueDate).getTime() - Date.now()) / (1000 * 60 * 60);
-    return diffHours <= 48;
+  onItemClick(item: CalendarItem): void {
+    if (item.type === 'PROJECT') {
+      this.router.navigate(['/projects', item.id]);
+    } else if (item.projectId) {
+      this.router.navigate(['/projects', item.projectId]);
+    }
   }
 }

@@ -1,0 +1,39 @@
+<div class="dashboard-container">
+    <h1>📊 Panel de Control & Estadística</h1>
+
+    <div *ngIf="isLoading()">Cargando estadísticas...</div>
+
+    <div *ngIf="!isLoading() && stats()" class="stats-grid">
+        <div class="stat-card blue">
+            <div class="icon">📁</div>
+            <div class="info">
+                <h3>{{ stats()?.totalProjects }}</h3>
+                <p>Proyectos Totales</p>
+            </div>
+        </div>
+
+        <div class="stat-card green">
+            <div class="icon">📋</div>
+            <div class="info">
+                <h3>{{ stats()?.totalTasks }}</h3>
+                <p>Tareas Creadas</p>
+            </div>
+        </div>
+
+        <div class="stat-card yellow">
+            <div class="icon">💬</div>
+            <div class="info">
+                <h3>{{ stats()?.totalComments }}</h3>
+                <p>Comentarios</p>
+            </div>
+        </div>
+
+        <div class="stat-card purple">
+            <div class="icon">👥</div>
+            <div class="info">
+                <h3>{{ stats()?.totalUsers }}</h3>
+                <p>Usuarios Registrados</p>
+            </div>
+        </div>
+    </div>
+</div>

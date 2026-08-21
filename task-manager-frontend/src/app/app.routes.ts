@@ -1,6 +1,7 @@
 // app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
+import { DashboardComponent } from './features/dashboard/dashboard';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/calendar/calendar').then(m => m.CalendarComponent)
   },
+  { path: 'dashboard', component: DashboardComponent },
   {
     path: '',
     redirectTo: 'projects',

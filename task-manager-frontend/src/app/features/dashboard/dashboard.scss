@@ -1,0 +1,43 @@
+
+.dashboard-container {
+  padding: 2rem;
+  color: #fff;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .stat-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+
+    .icon {
+      font-size: 2.5rem;
+    }
+
+    .info {
+      h3 {
+        font-size: 1.8rem;
+        margin: 0;
+      }
+      p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 0.9rem;
+      }
+    }
+
+    &.blue { border-left: 4px solid #3b82f6; }
+    &.green { border-left: 4px solid #10b981; }
+    &.yellow { border-left: 4px solid #f59e0b; }
+    &.purple { border-left: 4px solid #8b5cf6; }
+  }
+}
