@@ -16,10 +16,15 @@ export class ProjectListComponent implements OnInit {
   private projectService = inject(ProjectService);
   private fb = inject(FormBuilder);
 
+  allProjects: Project[] = [];
   projects: Project[] = [];
   isLoading = true;
   showModal = false;
-  showTable = false; // Le tableau reste caché au chargement initial
+  errorMessage: string | null = null; // affiché à l'utilisateur
+
+  currentPage = 1;
+  pageSize = 5;
+  totalPages = 1;
 
   projectForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
@@ -33,21 +38,44 @@ export class ProjectListComponent implements OnInit {
 
   loadProjects(): void {
     this.isLoading = true;
+    this.errorMessage = null;
     this.projectService.getAllProjects().subscribe({
       next: (data) => {
-        this.projects = data;
+        this.allProjects = data;
+        this.totalPages = Math.max(1, Math.ceil(this.allProjects.length / this.pageSize));
+        this.currentPage = 1;
+        this.updatePage();
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Error al cargar proyectos:', err);
+        this.errorMessage = `Erreur ${err.status} : impossible de charger les projets.`;
         this.isLoading = false;
       }
     });
   }
 
+  updatePage(): void {
+    const start = (this.currentPage - 1) * this.pageSize;
+    this.projects = this.allProjects.slice(start, start + this.pageSize);
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.updatePage();
+  }
+
+  nextPage(): void { this.goToPage(this.currentPage + 1); }
+  prevPage(): void { this.goToPage(this.currentPage - 1); }
+
+  get pagesArray(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
   openModal(): void {
-    this.showTable = true; // Affiche le tableau lors du clic
-    this.showModal = true; // Ouvre la fenêtre modale
+    this.errorMessage = null;
+    this.showModal = true;
   }
 
   closeModal(): void {
@@ -56,19 +84,24 @@ export class ProjectListComponent implements OnInit {
   }
 
   createProject(): void {
-    if (this.projectForm.invalid) return;
+    if (this.projectForm.invalid) {
+      this.projectForm.markAllAsTouched(); // force l'affichage des erreurs de validation
+      return;
+    }
 
-    const newProject: Project = {
-      ...this.projectForm.value,
-      ownerId: 1
-    };
+    const newProject: Project = { ...this.projectForm.value, ownerId: 1 };
 
     this.projectService.createProject(newProject).subscribe({
       next: (createdProject) => {
-        this.projects.push(createdProject);
+        this.allProjects.push(createdProject);
+        this.totalPages = Math.max(1, Math.ceil(this.allProjects.length / this.pageSize));
+        this.updatePage();
         this.closeModal();
       },
-      error: (err) => console.error('Error al crear proyecto:', err)
+      error: (err) => {
+        console.error('Error al crear proyecto:', err);
+        this.errorMessage = `Erreur ${err.status} : ${err.error?.message || 'création impossible'}.`;
+      }
     });
   }
 
@@ -77,7 +110,14 @@ export class ProjectListComponent implements OnInit {
     if (confirm('¿Deseas eliminar este proyecto?')) {
       this.projectService.deleteProject(id).subscribe({
         next: () => {
-          this.projects = this.projects.filter(p => p.id !== id);
+          this.allProjects = this.allProjects.filter(p => p.id !== id);
+          this.totalPages = Math.max(1, Math.ceil(this.allProjects.length / this.pageSize));
+          if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
+          this.updatePage();
+        },
+        error: (err) => {
+          console.error('Error al eliminar proyecto:', err);
+          this.errorMessage = `Erreur ${err.status} : suppression impossible.`;
         }
       });
     }

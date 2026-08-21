@@ -13,5 +13,7 @@ public interface TaskService {
     TaskResponseDTO updateTaskStatus(Long taskId, TaskStatus status);
     TaskResponseDTO assignTaskToUser(Long taskId, Long userId);
     TaskResponseDTO updateTask(Long id, TaskRequestDTO dto);
+    List<TaskResponseDTO> getTasksForCurrentUser();
+    List<TaskResponseDTO> getUrgentTasksForCurrentUser();
     void deleteTask(Long id);
 }

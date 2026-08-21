@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { jwtInterceptor } from './core/interceptors/jwt-interceptor';
+import { authInterceptor } from './core/interceptors/jwt-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideHttpClient(
-      withInterceptors([jwtInterceptor])
+      withInterceptors([authInterceptor])
     )
   ]
 };

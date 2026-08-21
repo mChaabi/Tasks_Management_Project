@@ -33,6 +33,7 @@ public class Task {
     @Builder.Default
     private TaskStatus status = TaskStatus.PENDING;
 
+
     @Column(name = "due_date")
     private LocalDate dueDate;
 

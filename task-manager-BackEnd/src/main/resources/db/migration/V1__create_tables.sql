@@ -7,6 +7,20 @@ CREATE TABLE users (
                        role VARCHAR(20) NOT NULL DEFAULT 'DEVELOPER'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
+-- Mot de passe en clair pour tous : "Password123!"
+-- Hash BCrypt correspondant (généré une seule fois, valable pour tous les inserts) :
+-- $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
+
+INSERT INTO users (name, email, password, role, date_creation) VALUES
+                                                                   ('Alice Manager', 'alice.manager@test.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'MANAGER', NOW()),
+                                                                   ('Bruno Manager', 'bruno.manager@test.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'MANAGER', NOW()),
+                                                                   ('Carla Developer', 'carla.dev@test.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'DEVELOPER', NOW()),
+                                                                   ('David Developer', 'david.dev@test.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'DEVELOPER', NOW()),
+                                                                   ('Eva User', 'eva.user@test.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USER', NOW()),
+                                                                   ('Farid User', 'farid.user@test.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USER', NOW());
+
 -- 2. Table Projects
 CREATE TABLE projects (
                           id BIGINT AUTO_INCREMENT PRIMARY KEY,

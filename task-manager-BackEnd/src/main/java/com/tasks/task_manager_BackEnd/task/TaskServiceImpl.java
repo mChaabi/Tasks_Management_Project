@@ -3,11 +3,13 @@ package com.tasks.task_manager_BackEnd.task;
 import com.tasks.task_manager_BackEnd.exception.ResourceNotFoundException;
 import com.tasks.task_manager_BackEnd.project.Project;
 import com.tasks.task_manager_BackEnd.project.ProjectRepository;
+import com.tasks.task_manager_BackEnd.user.CurrentUserProvider;
 import com.tasks.task_manager_BackEnd.user.User;
 import com.tasks.task_manager_BackEnd.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,13 +20,19 @@ public class TaskServiceImpl implements TaskService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final TaskMapper taskMapper;
+    private final CurrentUserProvider currentUserProvider;
 
-    public TaskServiceImpl(TaskRepository taskRepository, ProjectRepository projectRepository,
-                           UserRepository userRepository, TaskMapper taskMapper) {
+    // ⚠️ Le paramètre manquait dans le constructeur d'origine — corrigé ici
+    public TaskServiceImpl(TaskRepository taskRepository,
+                           ProjectRepository projectRepository,
+                           UserRepository userRepository,
+                           TaskMapper taskMapper,
+                           CurrentUserProvider currentUserProvider) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.taskMapper = taskMapper;
+        this.currentUserProvider = currentUserProvider;
     }
 
     @Override
@@ -143,5 +151,30 @@ public class TaskServiceImpl implements TaskService {
             throw new ResourceNotFoundException("Tarea no encontrada con ID: " + id);
         }
         taskRepository.deleteById(id);
+    }
+
+    // --- Implémentation des nouvelles méthodes ---
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TaskResponseDTO> getTasksForCurrentUser() {
+        User currentUser = currentUserProvider.getCurrentUser();
+        return taskRepository.findByAssignedUserId(currentUser.getId()).stream()
+                .map(taskMapper::toResponseDTO)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TaskResponseDTO> getUrgentTasksForCurrentUser() {
+        User currentUser = currentUserProvider.getCurrentUser();
+        LocalDate limit = LocalDate.now().plusDays(2); // urgent = échéance <= 48h
+
+        return taskRepository
+                .findByAssignedUserIdAndStatusNotAndDueDateLessThanEqual(
+                        currentUser.getId(), TaskStatus.COMPLETED, limit)
+                .stream()
+                .map(taskMapper::toResponseDTO)
+                .toList();
     }
 }

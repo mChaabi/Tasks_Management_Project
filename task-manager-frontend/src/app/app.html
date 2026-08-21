@@ -1,7 +1,7 @@
-<div class="app-layout">
-  <app-navbar></app-navbar>
+<app-navbar *ngIf="showLayout"></app-navbar>
 
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer *ngIf="showLayout"></app-footer>

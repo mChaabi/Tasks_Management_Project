@@ -7,7 +7,40 @@
 
     <ul class="nav-links">
       <li>
-        <a routerLink="/projects" routerLinkActive="active">Projets</a>
+        <a routerLink="/projects" routerLinkActive="active">
+          <span class="icon">📁</span>
+          <span>Proyectos</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/tasks" routerLinkActive="active">
+          <span class="icon">✅</span>
+          <span>Tareas</span>
+        </a>
+      </li>
+
+      <!-- Select / dropdown Outils -->
+      <li class="tools-dropdown">
+        <button class="tools-btn" (click)="toggleToolsMenu()" type="button">
+          <span class="icon">🧰</span>
+          <span>Herramientas</span>
+          <span class="badge" *ngIf="notificationService.urgentCount() > 0">
+            {{ notificationService.urgentCount() }}
+          </span>
+          <span class="chevron">▾</span>
+        </button>
+
+        <ul class="dropdown-menu" *ngIf="showToolsMenu">
+          <li (click)="goToCalendar()">
+            <span class="icon">📅</span> Calendario
+          </li>
+          <li (click)="openNotifications()">
+            <span class="icon">🔔</span> Notificaciones
+            <span class="mini-badge" *ngIf="notificationService.urgentCount() > 0">
+              {{ notificationService.urgentCount() }}
+            </span>
+          </li>
+        </ul>
       </li>
     </ul>
 
@@ -15,6 +48,34 @@
       <button class="btn-logout" (click)="logout()">
         <span>Déconnexion</span>
       </button>
+    </div>
+  </div>
+
+  <!-- Panneau des notifications -->
+  <div class="notif-panel-wrapper" *ngIf="showNotifPanel">
+    <div class="notif-panel">
+      <div class="notif-header">
+        <h3>Tareas urgentes</h3>
+        <button class="close-btn" (click)="closeNotifPanel()">✕</button>
+      </div>
+
+      <div *ngIf="notificationService.urgentTasks().length === 0" class="notif-empty">
+        No tienes tareas urgentes 🎉
+      </div>
+
+      <ul class="notif-list">
+        <li *ngFor="let task of notificationService.urgentTasks()"
+            (click)="goToTaskProject(task.projectId)"
+            [class.overdue]="notificationService.isOverdue(task)">
+          <span class="notif-icon">{{ notificationService.isOverdue(task) ? '⏰' : '⚠️' }}</span>
+          <div class="notif-content">
+            <strong>{{ task.title }}</strong>
+            <span class="due-date">
+              {{ notificationService.isOverdue(task) ? 'Vencida' : 'Vence' }}: {{ task.dueDate | date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

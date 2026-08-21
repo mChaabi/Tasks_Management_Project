@@ -1,7 +1,6 @@
 package com.tasks.task_manager_BackEnd.task;
 
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,18 +8,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
 
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
-
     @PostMapping
-    public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTask(dto));
+    public ResponseEntity<TaskResponseDTO> createTask(@RequestBody TaskRequestDTO dto) {
+        return ResponseEntity.ok(taskService.createTask(dto));
     }
 
     @GetMapping("/{id}")
@@ -38,7 +33,7 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTasksByProject(projectId));
     }
 
-    @GetMapping("/assigned/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<TaskResponseDTO>> getTasksByAssignedUser(@PathVariable Long userId) {
         return ResponseEntity.ok(taskService.getTasksByAssignedUser(userId));
     }
@@ -53,13 +48,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.updateTaskStatus(id, status));
     }
 
-    @PatchMapping("/{id}/assign/{userId}")
-    public ResponseEntity<TaskResponseDTO> assignTaskToUser(@PathVariable Long id, @PathVariable Long userId) {
+    @PatchMapping("/{id}/assign")
+    public ResponseEntity<TaskResponseDTO> assignTaskToUser(@PathVariable Long id, @RequestParam Long userId) {
         return ResponseEntity.ok(taskService.assignTaskToUser(id, userId));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequestDTO dto) {
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id, @RequestBody TaskRequestDTO dto) {
         return ResponseEntity.ok(taskService.updateTask(id, dto));
     }
 
@@ -67,5 +62,17 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // --- Endpoints navbar / calendrier / notifications ---
+
+    @GetMapping("/me")
+    public ResponseEntity<List<TaskResponseDTO>> getMyTasks() {
+        return ResponseEntity.ok(taskService.getTasksForCurrentUser());
+    }
+
+    @GetMapping("/me/urgent")
+    public ResponseEntity<List<TaskResponseDTO>> getMyUrgentTasks() {
+        return ResponseEntity.ok(taskService.getUrgentTasksForCurrentUser());
     }
 }

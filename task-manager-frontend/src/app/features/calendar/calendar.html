@@ -1,0 +1,44 @@
+<!-- calendar.component.html -->
+<div class="calendar-container">
+  <div class="calendar-header">
+    <button (click)="prevMonth()">‹</button>
+    <h2>{{ monthLabel() }}</h2>
+    <button (click)="nextMonth()">›</button>
+  </div>
+
+  <div class="weekdays-row">
+    <span *ngFor="let d of weekDays">{{ d }}</span>
+  </div>
+
+  <div class="days-grid">
+    <div
+      *ngFor="let day of calendarDays()"
+      class="day-cell"
+      [class.out-month]="!day.inCurrentMonth"
+      [class.today]="day.isToday"
+      [class.has-tasks]="day.tasks.length > 0"
+      (click)="selectDay(day)">
+      <span class="day-number">{{ day.date.getDate() }}</span>
+      <div class="task-dots" *ngIf="day.tasks.length > 0">
+        <span
+          class="dot"
+          *ngFor="let t of day.tasks.slice(0, 3)"
+          [class.urgent]="isUrgent(t)"></span>
+        <span class="more" *ngIf="day.tasks.length > 3">+{{ day.tasks.length - 3 }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Détail du jour sélectionné -->
+  <div class="day-detail" *ngIf="selectedDay()">
+    <h3>Tareas del {{ selectedDay()!.date.toLocaleDateString('es-ES') }}</h3>
+    <ul>
+      <li *ngFor="let task of selectedDay()!.tasks"
+          [class.urgent]="isUrgent(task)"
+          (click)="goToProject(task.projectId)">
+        <strong>{{ task.title }}</strong>
+        <span class="status">{{ task.status }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

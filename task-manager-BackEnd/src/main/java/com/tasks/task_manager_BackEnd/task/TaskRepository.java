@@ -3,6 +3,7 @@ package com.tasks.task_manager_BackEnd.task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -19,4 +20,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     // Obtener tareas de un proyecto filtradas por estado
     List<Task> findByProjectIdAndStatus(Long projectId, TaskStatus status);
+
+    // Variante utile pour les notifications : uniquement les tâches non terminées
+    // avec échéance avant une certaine date
+    List<Task> findByAssignedUserIdAndStatusNotAndDueDateLessThanEqual(
+            Long userId, TaskStatus status, LocalDate dueDate);
 }

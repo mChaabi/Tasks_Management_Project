@@ -22,6 +22,12 @@ export const routes: Routes = [
     loadChildren: () => import('./features/tasks/tasks-routing-module').then(m => m.TasksRoutingModule)
   },
 
+  // app.routes.ts
+{
+  path: 'calendar',
+  loadComponent: () => import('./features/calendar/calendar').then(m => m.CalendarComponent),
+  canActivate: [authGuard]
+},
   // Redirection par défaut
   {
     path: '',

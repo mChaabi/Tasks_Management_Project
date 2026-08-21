@@ -3,18 +3,14 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { AuthService } from '../services/auth';
 
 
-export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  const token = authService.getToken();
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = localStorage.getItem('token'); // adapte la clé selon ton AuthService
 
   if (token) {
-    const clonedReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+    const cloned = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` }
     });
-    return next(clonedReq);
+    return next(cloned);
   }
-
   return next(req);
 };

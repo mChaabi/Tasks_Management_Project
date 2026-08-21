@@ -12,5 +12,6 @@ public record TaskResponseDTO(
         LocalDate dueDate,
         LocalDateTime createdAt,
         Long projectId,
-        UserResponseDTO assignedUser
+        UserResponseDTO assignedUser,
+         String projectTitle
 ) {}
