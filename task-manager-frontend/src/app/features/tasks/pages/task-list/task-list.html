@@ -1,23 +1,38 @@
 <div class="list-container">
   <h2>Lista de Tareas</h2>
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Título</th>
-          <th>Descripción</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let task of tasks">
-          <td>{{ task.title }}</td>
-          <td>{{ task.description }}</td>
-          <td>
-            <span class="badge" [ngClass]="task.status.toLowerCase()">{{ task.status }}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+
+  <ng-container *ngIf="tasks$ | async as tasks; else loadingOrError">
+    <div class="table-wrapper" *ngIf="tasks.length > 0; else emptyState">
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Asignado a</th>
+            <th>Fecha límite</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>
+              <span class="badge" [ngClass]="task.status?.toLowerCase()">{{ task.status }}</span>
+            </td>
+            <td>{{ task.assignedUser?.name || 'Sin asignar' }}</td>
+            <td>{{ task.dueDate | date: 'dd/MM/yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #emptyState>
+      <p>No hay tareas disponibles.</p>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadingOrError>
+    <div>Cargando tareas...</div>
+  </ng-template>
 </div>

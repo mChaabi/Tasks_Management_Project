@@ -4,6 +4,20 @@
       <h1>Gestión de Proyectos</h1>
       <p>Lista general de proyectos y sus acciones</p>
     </div>
+    <!-- Botones de Exportar / Importar -->
+    <div class="export-group">
+      <button class="btn-action-outline" (click)="exportExcel()" title="Exportar a Excel">
+        📊 Excel
+      </button>
+      <button class="btn-action-outline" (click)="exportPdf()" title="Exportar a PDF">
+        📄 PDF
+      </button>
+      
+      <label class="btn-action-outline import-btn" title="Importar proyectos">
+        📥 Importar Excel
+        <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" hidden />
+      </label>
+    </div>
     <button class="btn-primary" (click)="openModal()">+ Nuevo Proyecto</button>
   </div>
 
@@ -44,6 +58,7 @@
           </td>
           <td class="actions-cell">
             <a [routerLink]="['/projects', project.id]" class="btn-action view">👁️ Ver / Tasks</a>
+            <button class="btn-action edit" (click)="openEditModal(project, $event)">✏️ Editar</button>
             <button class="btn-action delete" (click)="deleteProject(project.id!, $event)">🗑️ Eliminar</button>
           </td>
         </tr>
@@ -60,7 +75,7 @@
   <!-- Modal Crear Proyecto -->
   <div class="modal-backdrop" *ngIf="showModal">
     <div class="modal">
-      <h2>Crear Nuevo Proyecto</h2>
+      <h2>{{ editingProject ? 'Editar Proyecto' : 'Crear Nuevo Proyecto' }}</h2>
 
       <!-- Erreur spécifique à la création, à l'intérieur du modal -->
       <div class="error-banner modal-error" *ngIf="errorMessage">
@@ -68,12 +83,11 @@
         <button (click)="errorMessage = null">✕</button>
       </div>
 
-      <form [formGroup]="projectForm" (ngSubmit)="createProject()">
+      <form [formGroup]="projectForm" (ngSubmit)="saveProject()">
         <div class="form-group">
           <label>Título</label>
           <input type="text" formControlName="title" placeholder="Nombre del proyecto" />
-          <small class="field-error"
-                 *ngIf="projectForm.get('title')?.touched && projectForm.get('title')?.invalid">
+          <small class="field-error" *ngIf="projectForm.get('title')?.touched && projectForm.get('title')?.invalid">
             El título es obligatorio (mínimo 3 caracteres).
           </small>
         </div>
@@ -82,7 +96,7 @@
           <label>Descripción</label>
           <textarea formControlName="description" rows="3" placeholder="Detalles del proyecto"></textarea>
           <small class="field-error"
-                 *ngIf="projectForm.get('description')?.touched && projectForm.get('description')?.invalid">
+            *ngIf="projectForm.get('description')?.touched && projectForm.get('description')?.invalid">
             La descripción es obligatoria.
           </small>
         </div>
@@ -95,10 +109,11 @@
             <option value="COMPLETED">Completado</option>
           </select>
         </div>
-
         <div class="modal-actions">
           <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
-          <button type="submit" class="btn-primary" [disabled]="projectForm.invalid">Guardar</button>
+          <button type="submit" class="btn-primary" [disabled]="projectForm.invalid">
+            {{ editingProject ? 'Guardar Cambios' : 'Guardar' }}
+          </button>
         </div>
       </form>
     </div>

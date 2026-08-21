@@ -10,6 +10,10 @@ export class TaskService {
   private http = inject(HttpClient);
   private readonly API_URL = 'http://localhost:8080/api/tasks';
 
+getAllTasks(): Observable<Task[]> {
+    return this.http.get<Task[]>(this.API_URL);
+  }
+
   getTasksByProject(projectId: number): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.API_URL}/project/${projectId}`);
   }

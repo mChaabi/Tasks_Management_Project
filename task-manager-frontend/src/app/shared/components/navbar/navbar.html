@@ -1,27 +1,30 @@
 <nav class="navbar" *ngIf="isLoggedIn()">
   <div class="navbar-container">
+    
+    <!-- Brand / Logo -->
     <div class="brand" routerLink="/projects">
-      <span class="logo-icon">⚡</span>
+      <div class="brand-logo">⚡</div>
       <span class="brand-name">TaskManager</span>
     </div>
 
+    <!-- Links de Navegación -->
     <ul class="nav-links">
       <li>
-        <a routerLink="/projects" routerLinkActive="active">
+        <a routerLink="/projects" routerLinkActive="active" class="nav-item">
           <span class="icon">📁</span>
           <span>Proyectos</span>
         </a>
       </li>
       <li>
-        <a routerLink="/tasks" routerLinkActive="active">
+        <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
           <span class="icon">✅</span>
           <span>Tareas</span>
         </a>
       </li>
 
-      <!-- Select / dropdown Outils -->
+      <!-- Menú Opciones / Herramientas -->
       <li class="tools-dropdown">
-        <button class="tools-btn" (click)="toggleToolsMenu()" type="button">
+        <button class="tools-btn" (click)="toggleToolsMenu()" type="button" [class.active]="showToolsMenu">
           <span class="icon">🧰</span>
           <span>Herramientas</span>
           <span class="badge" *ngIf="notificationService.urgentCount() > 0">
@@ -30,28 +33,32 @@
           <span class="chevron">▾</span>
         </button>
 
-        <ul class="dropdown-menu" *ngIf="showToolsMenu">
-          <li (click)="goToCalendar()">
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" *ngIf="showToolsMenu">
+          <button class="dropdown-item" (click)="goToCalendar()">
             <span class="icon">📅</span> Calendario
-          </li>
-          <li (click)="openNotifications()">
+          </button>
+          <button class="dropdown-item" (click)="openNotifications()">
             <span class="icon">🔔</span> Notificaciones
             <span class="mini-badge" *ngIf="notificationService.urgentCount() > 0">
               {{ notificationService.urgentCount() }}
             </span>
-          </li>
-        </ul>
+          </button>
+        </div>
       </li>
     </ul>
 
+    <!-- Acciones Usuario -->
     <div class="user-actions">
       <button class="btn-logout" (click)="logout()">
-        <span>Déconnexion</span>
+        <span class="icon">🚪</span>
+        <span>Cerrar sesión</span>
       </button>
     </div>
+
   </div>
 
-  <!-- Panneau des notifications -->
+  <!-- Panel flotante de Notificaciones -->
   <div class="notif-panel-wrapper" *ngIf="showNotifPanel">
     <div class="notif-panel">
       <div class="notif-header">

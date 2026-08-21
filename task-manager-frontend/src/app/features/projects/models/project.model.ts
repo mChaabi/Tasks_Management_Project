@@ -5,4 +5,5 @@ export interface Project {
   status?: 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED';
   createdAt?: string;
   updatedAt?: string;
+  ownerId?: number;
 }

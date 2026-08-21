@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectService } from '../../services/project';
 import { Project } from '../../models/project.model';
+import { ExportService } from '../../../../services/export';
 
 @Component({
   selector: 'app-project-list',
@@ -15,12 +16,14 @@ import { Project } from '../../models/project.model';
 export class ProjectListComponent implements OnInit {
   private projectService = inject(ProjectService);
   private fb = inject(FormBuilder);
+  private exportService = inject(ExportService);
 
   allProjects: Project[] = [];
   projects: Project[] = [];
   isLoading = true;
   showModal = false;
   errorMessage: string | null = null; // affiché à l'utilisateur
+  editingProject: Project | null = null;
 
   currentPage = 1;
   pageSize = 5;
@@ -34,6 +37,42 @@ export class ProjectListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProjects();
+  }
+
+  exportExcel(): void {
+    this.exportService.exportToExcel(this.allProjects);
+  }
+  exportPdf(): void {
+    this.exportService.exportToPdf(this.allProjects);
+  }
+
+
+  // Importar desde archivo Excel
+  onFileSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      const file = target.files[0];
+      this.exportService.importFromExcel(file).then((importedProjects) => {
+        // Enviar cada proyecto al backend o procesarlos en masa
+        importedProjects.forEach((proj) => {
+          const newProj: Project = {
+            title: proj.title || 'Sin Título',
+            description: proj.description || '',
+            status: proj.status || 'PLANNED',
+            ownerId: 1
+          };
+          this.projectService.createProject(newProj).subscribe({
+            next: (created) => {
+              this.allProjects.push(created);
+              this.updatePage();
+            }
+          });
+        });
+      }).catch(err => {
+        console.error('Error al importar:', err);
+        this.errorMessage = 'El archivo Excel no tiene un formato válido.';
+      });
+    }
   }
 
   loadProjects(): void {
@@ -66,6 +105,8 @@ export class ProjectListComponent implements OnInit {
     this.updatePage();
   }
 
+  
+
   nextPage(): void { this.goToPage(this.currentPage + 1); }
   prevPage(): void { this.goToPage(this.currentPage - 1); }
 
@@ -73,22 +114,58 @@ export class ProjectListComponent implements OnInit {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
-  openModal(): void {
-    this.errorMessage = null;
-    this.showModal = true;
-  }
+  openEditModal(project: Project, event: Event): void {
+  event.stopPropagation();
+  this.editingProject = project;
+  this.errorMessage = null;
+  this.projectForm.patchValue({
+    title: project.title,
+    description: project.description,
+    status: project.status || 'PLANNED'
+  });
+  this.showModal = true;
+}
+
+ openModal(): void {
+  this.editingProject = null;
+  this.errorMessage = null;
+  this.showModal = true;
+}
 
   closeModal(): void {
-    this.showModal = false;
-    this.projectForm.reset({ status: 'PLANNED' });
+  this.showModal = false;
+  this.editingProject = null;
+  this.projectForm.reset({ status: 'PLANNED' });
+}
+  
+
+saveProject(): void {
+  if (this.projectForm.invalid) {
+    this.projectForm.markAllAsTouched();
+    return;
   }
 
-  createProject(): void {
-    if (this.projectForm.invalid) {
-      this.projectForm.markAllAsTouched(); // force l'affichage des erreurs de validation
-      return;
-    }
+  if (this.editingProject) {
+    // --- Modo edición ---
+    const updated: Project = {
+      ...this.projectForm.value,
+      ownerId: this.editingProject.ownerId
+    };
 
+    this.projectService.updateProject(this.editingProject.id!, updated).subscribe({
+      next: (result) => {
+        const idx = this.allProjects.findIndex(p => p.id === this.editingProject!.id);
+        if (idx !== -1) this.allProjects[idx] = result;
+        this.updatePage();
+        this.closeModal();
+      },
+      error: (err) => {
+        console.error('Error al editar proyecto:', err);
+        this.errorMessage = `Error ${err.status}: ${err.error?.message || 'edición no permitida'}.`;
+      }
+    });
+  } else {
+    // --- Modo creación ---
     const newProject: Project = { ...this.projectForm.value, ownerId: 1 };
 
     this.projectService.createProject(newProject).subscribe({
@@ -100,10 +177,11 @@ export class ProjectListComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al crear proyecto:', err);
-        this.errorMessage = `Erreur ${err.status} : ${err.error?.message || 'création impossible'}.`;
+        this.errorMessage = `Error ${err.status}: ${err.error?.message || 'creación imposible'}.`;
       }
     });
   }
+}
 
   deleteProject(id: number, event: Event): void {
     event.stopPropagation();

@@ -4,6 +4,7 @@ import { TaskBoardComponent } from './pages/task-board/task-board';
 import { TaskListComponent } from './pages/task-list/task-list';
 
 const routes: Routes = [
+  { path: '', component: TaskListComponent },
   { path: 'project/:projectId/board', component: TaskBoardComponent },
   { path: 'project/:projectId/list', component: TaskListComponent }
 ];

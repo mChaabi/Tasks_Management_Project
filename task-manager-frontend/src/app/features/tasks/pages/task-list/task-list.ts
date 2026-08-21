@@ -1,8 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../../services/task';
 import { Task } from '../../models/task.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-task-list',
@@ -12,18 +12,27 @@ import { Task } from '../../models/task.model';
   styleUrl: './task-list.scss'
 })
 export class TaskListComponent implements OnInit {
-  private route = inject(ActivatedRoute);
   private taskService = inject(TaskService);
+  tasks$: Observable<Task[]> = this.taskService.getAllTasks();
+  private cdr = inject(ChangeDetectorRef); // Inyectamos ChangeDetectorRef
 
   tasks: Task[] = [];
-  projectId!: number;
+  isLoading = true;
+  errorMessage: string | null = null;
 
   ngOnInit(): void {
-    this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
-    if (this.projectId) {
-      this.taskService.getTasksByProject(this.projectId).subscribe(data => {
-        this.tasks = data;
-      });
-    }
+    this.taskService.getAllTasks().subscribe({
+      next: (data) => {
+        this.tasks = data || [];
+        this.isLoading = false;
+        this.cdr.detectChanges(); // Forzar la actualización visual
+      },
+      error: (err) => {
+        console.error('Error al cargar tareas:', err);
+        this.errorMessage = `Error ${err.status}: no se pudieron cargar las tareas.`;
+        this.isLoading = false;
+        this.cdr.detectChanges(); // Forzar la actualización visual en error
+      }
+    });
   }
 }

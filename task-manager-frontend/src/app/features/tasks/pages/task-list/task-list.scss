@@ -108,3 +108,69 @@ table {
   &.in_progress { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
   &.done { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
 }
+
+// task-list.scss
+
+.list-container {
+  padding: 2rem;
+  color: #1e293b; // Color oscuro para que el texto sea visible
+
+  h2 {
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.table-wrapper {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+
+    th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    tr:hover {
+      background-color: #f1f5f9;
+    }
+  }
+}
+
+// Estilos de las etiquetas de estado
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &.pending {
+    background-color: #fef3c7;
+    color: #d97706;
+  }
+
+  &.in_progress {
+    background-color: #dbeafe;
+    color: #2563eb;
+  }
+
+  &.completed {
+    background-color: #dcfce7;
+    color: #16a34a;
+  }
+}
