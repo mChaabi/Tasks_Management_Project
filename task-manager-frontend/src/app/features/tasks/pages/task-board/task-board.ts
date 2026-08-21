@@ -1,6 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskService } from '../../services/task';
 import { Task, TaskStatus } from '../../models/task.model';
@@ -13,40 +12,42 @@ import { Task, TaskStatus } from '../../models/task.model';
   styleUrl: './task-board.scss'
 })
 export class TaskBoardComponent implements OnInit {
-  private route = inject(ActivatedRoute);
   private taskService = inject(TaskService);
   private fb = inject(FormBuilder);
 
-  projectId!: number;
+  @Input() projectId!: number; // Reçoit l'ID envoyé par project-detail
   tasks: Task[] = [];
   showModal = false;
 
   taskForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: ['', [Validators.required]],
-    status: ['TODO', [Validators.required]]
+    status: ['PENDING', [Validators.required]]
   });
 
   ngOnInit(): void {
-    this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+    // UTILISER DIRECTEMENT THIS.PROJECTID
     if (this.projectId) {
       this.loadTasks();
     }
   }
 
   loadTasks(): void {
-    this.taskService.getTasksByProject(this.projectId).subscribe(data => {
-      this.tasks = data;
+    this.taskService.getTasksByProject(this.projectId).subscribe({
+      next: (data) => {
+        this.tasks = data || [];
+      },
+      error: (err) => console.error('Error al cargar tareas:', err)
     });
   }
 
   getTasksByStatus(status: TaskStatus): Task[] {
-    return this.tasks.filter(t => t.status === status);
+    return this.tasks.filter((t) => t.status === status);
   }
 
   changeStatus(taskId: number, newStatus: TaskStatus): void {
-    this.taskService.updateTaskStatus(taskId, newStatus).subscribe(updated => {
-      const index = this.tasks.findIndex(t => t.id === taskId);
+    this.taskService.updateTaskStatus(taskId, newStatus).subscribe((updated) => {
+      const index = this.tasks.findIndex((t) => t.id === taskId);
       if (index !== -1) this.tasks[index] = updated;
     });
   }
@@ -58,7 +59,7 @@ export class TaskBoardComponent implements OnInit {
       projectId: this.projectId
     };
 
-    this.taskService.createTask(newTask).subscribe(created => {
+    this.taskService.createTask(newTask).subscribe((created) => {
       this.tasks.push(created);
       this.closeModal();
     });
@@ -67,11 +68,11 @@ export class TaskBoardComponent implements OnInit {
   deleteTask(id: number): void {
     if (confirm('¿Eliminar esta tarea?')) {
       this.taskService.deleteTask(id).subscribe(() => {
-        this.tasks = this.tasks.filter(t => t.id !== id);
+        this.tasks = this.tasks.filter((t) => t.id !== id);
       });
     }
   }
 
   openModal(): void { this.showModal = true; }
-  closeModal(): void { this.showModal = false; this.taskForm.reset({ status: 'TODO' }); }
+  closeModal(): void { this.showModal = false; this.taskForm.reset({ status: 'PENDING' }); }
 }

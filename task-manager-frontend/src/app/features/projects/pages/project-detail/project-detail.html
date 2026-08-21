@@ -1,21 +1,31 @@
-<div class="detail-container" *ngIf="project">
+<div class="detail-container" *ngIf="!isLoading && project">
+  <!-- Link Back -->
   <a routerLink="/projects" class="back-link">← Volver a proyectos</a>
 
+  <!-- Project Card -->
   <div class="detail-card">
     <div class="detail-header">
       <h1>{{ project.title }}</h1>
-      <span class="status-badge" [ngClass]="project.status.toLowerCase()">
-        {{ project.status }}
+      <span class="status-badge" [ngClass]="(project.status || 'PLANNED').toLowerCase()">
+        {{ project.status || 'PLANNED' }}
       </span>
     </div>
-
     <p class="description">{{ project.description }}</p>
-
-    <div class="detail-info">
-      <div>
-        <small>Fecha de creación</small>
-        <p>{{ project.createdAt | date:'mediumDate' }}</p>
-      </div>
-    </div>
   </div>
+
+  <!-- Task Board Integration -->
+  <div class="tasks-section" *ngIf="project.id">
+    <app-task-board [projectId]="project.id"></app-task-board>
+  </div>
+</div>
+
+<!-- Loader -->
+<div *ngIf="isLoading" class="loader-container">
+  <div class="spinner"></div>
+</div>
+
+<!-- Message si le projet n'existe pas -->
+<div *ngIf="!isLoading && !project" class="empty-state">
+  <p>El proyecto no existe o fue eliminado.</p>
+  <a routerLink="/projects" class="btn-primary">Volver a la lista</a>
 </div>

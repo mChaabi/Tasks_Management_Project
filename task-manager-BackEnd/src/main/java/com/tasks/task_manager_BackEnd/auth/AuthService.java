@@ -1,9 +1,6 @@
 package com.tasks.task_manager_BackEnd.auth;
 
-import com.tasks.task_manager_BackEnd.user.CustomUserDetailsService;
-import com.tasks.task_manager_BackEnd.user.UserRequestDTO;
-import com.tasks.task_manager_BackEnd.user.UserResponseDTO;
-import com.tasks.task_manager_BackEnd.user.UserService;
+import com.tasks.task_manager_BackEnd.user.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +23,19 @@ public class AuthService {
     }
 
     public UserResponseDTO register(UserRequestDTO dto) {
-        return userService.createUser(dto);
+        // 1. Définir le rôle par défaut si non renseigné
+        Role userRole = (dto.role() != null) ? dto.role() : Role.USER;
+
+        // 2. Créer l'objet DTO ajusté
+        UserRequestDTO userToCreate = new UserRequestDTO(
+                dto.name(),
+                dto.email(),
+                dto.password(),
+                userRole
+        );
+
+        // 3. Sauvegarder l'utilisateur via le UserService
+        return userService.createUser(userToCreate);
     }
 
     public AuthResponseDTO login(LoginRequestDTO dto) {

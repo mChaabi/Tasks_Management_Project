@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjectService } from '../../services/project';
 import { Project } from '../../models/project.model';
+import { TaskBoardComponent } from '../../../tasks/pages/task-board/task-board';
 
 @Component({
   selector: 'app-project-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TaskBoardComponent],
   templateUrl: './project-detail.html',
   styleUrl: './project-detail.scss'
 })
@@ -26,8 +27,13 @@ export class ProjectDetailComponent implements OnInit {
           this.project = data;
           this.isLoading = false;
         },
-        error: () => this.isLoading = false
+        error: (err) => {
+          console.error('Error al cargar el proyecto:', err);
+          this.isLoading = false;
+        }
       });
+    } else {
+      this.isLoading = false;
     }
   }
 }

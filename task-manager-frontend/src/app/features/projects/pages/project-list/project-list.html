@@ -1,8 +1,8 @@
 <div class="projects-container">
   <div class="header">
     <div>
-      <h1>Proyectos</h1>
-      <p>Gestiona todos tus proyectos en un solo lugar</p>
+      <h1>Gestión de Proyectos</h1>
+      <p>Lista general de proyectos y sus acciones</p>
     </div>
     <button class="btn-primary" (click)="openModal()">+ Nuevo Proyecto</button>
   </div>
@@ -11,24 +11,46 @@
     <div class="spinner"></div>
   </div>
 
-  <div *ngIf="!isLoading && projects.length === 0" class="empty-state">
-    <p>No hay proyectos registrados. ¡Crea el primero!</p>
-  </div>
-
-  <div *ngIf="!isLoading && projects.length > 0" class="projects-grid">
-    <div *ngFor="let project of projects" class="project-card" [routerLink]="['/projects', project.id]">
-      <div class="card-header">
-        <span class="status-badge" [ngClass]="project.status.toLowerCase()">
-          {{ project.status }}
-        </span>
-        <button class="btn-delete" (click)="deleteProject(project.id!, $event)">🗑️</button>
-      </div>
-      <h3>{{ project.title }}</h3>
-      <p class="description">{{ project.description }}</p>
+  <!-- Le tableau s'affiche uniquement si showTable est vrai -->
+  <div *ngIf="!isLoading && showTable" class="table-wrapper">
+    <div *ngIf="projects.length === 0" class="empty-state">
+      <p>No hay proyectos registrados. ¡Crea el primero!</p>
     </div>
+
+    <table *ngIf="projects.length > 0" class="projects-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let project of projects">
+          <td>#{{ project.id }}</td>
+          <td class="font-bold">{{ project.title }}</td>
+          <td class="desc-cell">{{ project.description }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="(project.status || 'PLANNED').toLowerCase()">
+              {{ project.status || 'PLANNED' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <a [routerLink]="['/projects', project.id]" class="btn-action view">
+              👁️ Ver / Tasks
+            </a>
+            <button class="btn-action delete" (click)="deleteProject(project.id!, $event)">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- Modal Crear Proyecto -->
+  <!-- Modal en superposition (Overlay) -->
   <div class="modal-backdrop" *ngIf="showModal">
     <div class="modal">
       <h2>Crear Nuevo Proyecto</h2>

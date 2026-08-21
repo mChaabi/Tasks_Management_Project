@@ -1,8 +1,7 @@
-import { inject, Injectable } from '@angular/core';
-import { CanActivate, CanActivateFn, Router, UrlTree } from '@angular/router';
+// core/guards/auth-guard.ts
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth';
-import { HttpInterceptorFn } from '@angular/common/http';
-
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -12,6 +11,5 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  router.navigate(['/auth/login']);
-  return false;
+  return router.createUrlTree(['/auth/login']);
 };

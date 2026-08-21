@@ -19,6 +19,7 @@ export class ProjectListComponent implements OnInit {
   projects: Project[] = [];
   isLoading = true;
   showModal = false;
+  showTable = false; // Le tableau reste caché au chargement initial
 
   projectForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
@@ -37,12 +38,16 @@ export class ProjectListComponent implements OnInit {
         this.projects = data;
         this.isLoading = false;
       },
-      error: () => this.isLoading = false
+      error: (err) => {
+        console.error('Error al cargar proyectos:', err);
+        this.isLoading = false;
+      }
     });
   }
 
   openModal(): void {
-    this.showModal = true;
+    this.showTable = true; // Affiche le tableau lors du clic
+    this.showModal = true; // Ouvre la fenêtre modale
   }
 
   closeModal(): void {
@@ -53,11 +58,17 @@ export class ProjectListComponent implements OnInit {
   createProject(): void {
     if (this.projectForm.invalid) return;
 
-    this.projectService.createProject(this.projectForm.value).subscribe({
-      next: (newProject) => {
-        this.projects.push(newProject);
+    const newProject: Project = {
+      ...this.projectForm.value,
+      ownerId: 1
+    };
+
+    this.projectService.createProject(newProject).subscribe({
+      next: (createdProject) => {
+        this.projects.push(createdProject);
         this.closeModal();
-      }
+      },
+      error: (err) => console.error('Error al crear proyecto:', err)
     });
   }
 

@@ -5,14 +5,14 @@
   </div>
 
   <div class="columns-grid">
-    <!-- Columna POR HACER -->
+    <!-- Columna PENDIENTE -->
     <div class="column">
       <div class="column-header todo">
         <span>POR HACER</span>
-        <span class="count">{{ getTasksByStatus('TODO').length }}</span>
+        <span class="count">{{ getTasksByStatus('PENDING').length }}</span>
       </div>
       <div class="task-list">
-        <div *ngFor="let task of getTasksByStatus('TODO')" class="task-card">
+        <div *ngFor="let task of getTasksByStatus('PENDING')" class="task-card">
           <h4>{{ task.title }}</h4>
           <p>{{ task.description }}</p>
           <div class="card-actions">
@@ -34,8 +34,8 @@
           <h4>{{ task.title }}</h4>
           <p>{{ task.description }}</p>
           <div class="card-actions">
-            <button (click)="changeStatus(task.id!, 'TODO')">← Pendiente</button>
-            <button (click)="changeStatus(task.id!, 'DONE')">→ Hecho</button>
+            <button (click)="changeStatus(task.id!, 'PENDING')">← Pendiente</button>
+            <button (click)="changeStatus(task.id!, 'COMPLETED')">→ Hecho</button>
             <button class="btn-del" (click)="deleteTask(task.id!)">🗑️</button>
           </div>
         </div>
@@ -46,10 +46,10 @@
     <div class="column">
       <div class="column-header done">
         <span>COMPLETADO</span>
-        <span class="count">{{ getTasksByStatus('DONE').length }}</span>
+        <span class="count">{{ getTasksByStatus('COMPLETED').length }}</span>
       </div>
       <div class="task-list">
-        <div *ngFor="let task of getTasksByStatus('DONE')" class="task-card">
+        <div *ngFor="let task of getTasksByStatus('COMPLETED')" class="task-card">
           <h4>{{ task.title }}</h4>
           <p>{{ task.description }}</p>
           <div class="card-actions">
