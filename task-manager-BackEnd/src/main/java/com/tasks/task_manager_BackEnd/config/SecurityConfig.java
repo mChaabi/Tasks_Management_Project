@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/dashboard/**").authenticated() // Ou .permitAll() pour tester
                         .anyRequest().authenticated()
                 )
                 // ⚠️ LA LIGNE QUI MANQUAIT : insère le filtre JWT avant le filtre standard

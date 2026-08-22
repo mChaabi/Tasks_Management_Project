@@ -1,4 +1,3 @@
-// navbar.ts
 import { Component, inject, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -18,6 +17,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   notificationService = inject(NotificationService);
 
   showToolsMenu = false;
+  showUsersMenu = false;
   showNotifPanel = false;
 
   ngOnInit(): void {
@@ -34,9 +34,35 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn();
   }
 
+  canSeeUsers(): boolean {
+    return true;
+  }
+
   toggleToolsMenu(): void {
     this.showToolsMenu = !this.showToolsMenu;
+    this.showUsersMenu = false;
     this.showNotifPanel = false;
+  }
+
+  toggleUsersMenu(): void {
+    this.showUsersMenu = !this.showUsersMenu;
+    this.showToolsMenu = false;
+    this.showNotifPanel = false;
+  }
+
+  goToUsersList(): void {
+    this.showUsersMenu = false;
+    this.router.navigate(['/users']);
+  }
+
+  openAddUserModal(): void {
+    this.showUsersMenu = false;
+    this.router.navigate(['/users'], { queryParams: { action: 'create' } });
+  }
+
+  goToDashboard(): void {
+    this.showToolsMenu = false;
+    this.router.navigate(['/dashboard']);
   }
 
   goToCalendar(): void {
@@ -59,12 +85,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/projects', projectId]);
   }
 
-  // Ferme les menus si on clique en dehors
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
     if (!target.closest('.tools-dropdown') && !target.closest('.notif-panel-wrapper')) {
       this.showToolsMenu = false;
+      this.showUsersMenu = false;
       this.showNotifPanel = false;
     }
   }

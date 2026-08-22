@@ -287,3 +287,51 @@
     }
   }
 }
+
+/* Style SCSS pour la Navbar Dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+  .dropdown-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    &:hover { color: #f8fafc; }
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    min-width: 180px;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+    z-index: 100;
+  }
+
+  &:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-item {
+    display: block;
+    padding: 0.6rem 1rem;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.85rem;
+    &:hover {
+      background: #334155;
+      color: #f8fafc;
+    }
+  }
+}

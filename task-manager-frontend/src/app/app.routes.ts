@@ -2,6 +2,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
 import { DashboardComponent } from './features/dashboard/dashboard';
+import { UsersListComponent } from './features/user/components/user/user';
 
 export const routes: Routes = [
   {
@@ -23,7 +24,17 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/calendar/calendar').then(m => m.CalendarComponent)
   },
-  { path: 'dashboard', component: DashboardComponent },
+  {
+    path: 'dashboard',
+    canActivate: [authGuard],
+    component: DashboardComponent
+  },
+   {
+    path: 'users',
+    component: UsersListComponent,
+    // canActivate: [authGuard], // réutilise le guard déjà utilisé pour /dashboard, /projects, etc.
+    title: 'Équipe'
+  },
   {
     path: '',
     redirectTo: 'projects',

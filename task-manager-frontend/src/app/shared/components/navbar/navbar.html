@@ -1,6 +1,6 @@
 <nav class="navbar" *ngIf="isLoggedIn()">
   <div class="navbar-container">
-    
+
     <!-- Brand / Logo -->
     <div class="brand" routerLink="/projects">
       <div class="brand-logo">⚡</div>
@@ -9,17 +9,45 @@
 
     <!-- Links de Navegación -->
     <ul class="nav-links">
+      <!-- BOUTON DASHBOARD -->
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+      </li>
+
       <li>
         <a routerLink="/projects" routerLinkActive="active" class="nav-item">
           <span class="icon">📁</span>
           <span>Proyectos</span>
         </a>
       </li>
+
       <li>
         <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
           <span class="icon">✅</span>
           <span>Tareas</span>
         </a>
+      </li>
+
+      <!-- Menu Déroulant Équipe / Usuarios -->
+      <li class="tools-dropdown" *ngIf="canSeeUsers()">
+        <button class="tools-btn" (click)="toggleUsersMenu()" type="button" [class.active]="showUsersMenu">
+          <span class="icon">👥</span>
+          <span>Équipe</span>
+          <span class="chevron">▾</span>
+        </button>
+
+        <!-- Submenu -->
+        <div class="dropdown-menu" *ngIf="showUsersMenu">
+          <button class="dropdown-item" (click)="goToUsersList()">
+            <span class="icon">📋</span> Liste des membres
+          </button>
+          <button class="dropdown-item" (click)="openAddUserModal()">
+            <span class="icon">➕</span> Ajouter un membre
+          </button>
+        </div>
       </li>
 
       <!-- Menú Opciones / Herramientas -->
@@ -35,6 +63,9 @@
 
         <!-- Dropdown Menu -->
         <div class="dropdown-menu" *ngIf="showToolsMenu">
+          <button class="dropdown-item" (click)="goToDashboard()">
+            <span class="icon">📊</span> Dashboard
+          </button>
           <button class="dropdown-item" (click)="goToCalendar()">
             <span class="icon">📅</span> Calendario
           </button>
@@ -71,9 +102,8 @@
       </div>
 
       <ul class="notif-list">
-        <li *ngFor="let task of notificationService.urgentTasks()"
-            (click)="goToTaskProject(task.projectId)"
-            [class.overdue]="notificationService.isOverdue(task)">
+        <li *ngFor="let task of notificationService.urgentTasks()" (click)="goToTaskProject(task.projectId)"
+          [class.overdue]="notificationService.isOverdue(task)">
           <span class="notif-icon">{{ notificationService.isOverdue(task) ? '⏰' : '⚠️' }}</span>
           <div class="notif-content">
             <strong>{{ task.title }}</strong>

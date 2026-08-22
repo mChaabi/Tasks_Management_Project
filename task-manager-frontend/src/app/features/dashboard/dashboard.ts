@@ -6,24 +6,26 @@ import { DashboardService, DashboardStats } from './services/dashboard';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss'
 })
 export class DashboardComponent implements OnInit {
   private dashboardService = inject(DashboardService);
   
   stats = signal<DashboardStats | null>(null);
-  isLoading = signal<boolean>(true); // Declared as a signal
+  isLoading = signal<boolean>(true);
+  errorMessage = signal<string | null>(null);
 
   ngOnInit(): void {
     this.dashboardService.getStats().subscribe({
-      next: (data) => {
+      next: (data: DashboardStats) => {
         this.stats.set(data);
-        this.isLoading.set(false); // FIXED: No () before .set()
+        this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Error dashboard:', err);
-        this.isLoading.set(false); // FIXED: No () before .set()
+        console.error('Error cargando dashboard:', err);
+        this.errorMessage.set('Error al cargar las estadísticas del servidor.');
+        this.isLoading.set(false);
       }
     });
   }

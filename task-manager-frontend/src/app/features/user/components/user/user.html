@@ -1,0 +1,142 @@
+<section class="users-page">
+  <header class="users-header">
+    <div class="heading">
+      <h2>Équipe</h2>
+      <p>{{ filteredUsers.length }} membre{{ filteredUsers.length > 1 ? 's' : '' }}</p>
+    </div>
+
+    <div class="header-actions">
+      <div class="search-box">
+        <span class="icon">🔍</span>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Rechercher un membre, un rôle..."
+        />
+      </div>
+
+      <button class="btn-add-user" (click)="showCreateModal = true">
+        ➕ Ajouter un membre
+      </button>
+    </div>
+  </header>
+
+  <div class="state-banner error" *ngIf="error">
+    <span>⚠️</span>
+    <div>
+      <strong>Impossible de charger les membres</strong>
+      <button (click)="fetchUsers()">Réessayer</button>
+    </div>
+  </div>
+
+  <div class="loading-table" *ngIf="loading">
+    <div class="skeleton-row" *ngFor="let s of skeletonArray"></div>
+  </div>
+
+  <div class="table-container" *ngIf="!loading && !error">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Membre</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Projets</th>
+          <th>Tâches</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let user of paginatedUsers">
+          <tr 
+            class="user-row" 
+            [class.active]="isExpanded(user.id)"
+            (click)="togglePin(user.id, $event)"
+            (mouseenter)="onHover(user.id)"
+            (mouseleave)="onLeave()"
+          >
+            <td class="user-cell">
+              <div class="avatar" [style.--role-color]="roleColor(user.role)">
+                {{ initials(user.name) }}
+              </div>
+              <strong class="user-name">{{ user.name }}</strong>
+            </td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="role-badge" [style.--role-color]="roleColor(user.role)">
+                {{ roleLabel(user.role) }}
+              </span>
+            </td>
+            <td>{{ user.projectsCount ?? (user.projects?.length || 0) }}</td>
+            <td>{{ user.tasksCount ?? (user.tasks?.length || 0) }}</td>
+          </tr>
+
+          <tr class="detail-row" *ngIf="isExpanded(user.id)">
+            <td colspan="5">
+              <div class="card-detail">
+                <div class="loading-detail" *ngIf="loadingDetailId === user.id">
+                  Chargement du détail…
+                </div>
+
+                <ng-container *ngIf="loadingDetailId !== user.id">
+                  <div class="detail-grid">
+                    <div class="detail-list" *ngIf="user.projects?.length">
+                      <span class="detail-list-title">📁 Projets ({{ user.projects?.length }})</span>
+                      <ul>
+                        <li *ngFor="let p of user.projects?.slice(0, 5)">{{ p.name }}</li>
+                      </ul>
+                    </div>
+
+                    <div class="detail-list" *ngIf="user.tasks?.length">
+                      <span class="detail-list-title">✅ Tâches récentes ({{ user.tasks?.length }})</span>
+                      <ul>
+                        <li *ngFor="let t of user.tasks?.slice(0, 5)">
+                          <span class="task-dot" [ngClass]="statusClass(t.status)"></span>
+                          {{ t.title }}
+                        </li>
+                      </ul>
+                    </div>
+
+                    <p class="detail-empty" *ngIf="!user.projects?.length && !user.tasks?.length">
+                      Aucun projet ni tâche assignée pour le moment.
+                    </p>
+                  </div>
+                </ng-container>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+
+        <tr *ngIf="filteredUsers.length === 0">
+          <td colspan="5" class="empty-state">
+            <span>😶</span> Aucun membre ne correspond à « {{ searchTerm }} »
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination-bar" *ngIf="filteredUsers.length > 0">
+      <span class="pagination-info">
+        Page {{ currentPage }} sur {{ totalPages }}
+      </span>
+      <div class="pagination-controls">
+        <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">Précédent</button>
+        <button 
+          *ngFor="let page of [].constructor(totalPages); let i = index" 
+          [class.active]="currentPage === i + 1"
+          (click)="changePage(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+        <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">Suivant</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modale de création -->
+<app-user-create-modal 
+  *ngIf="showCreateModal" 
+  (close)="showCreateModal = false" 
+  (created)="onUserCreated()"
+></app-user-create-modal>
