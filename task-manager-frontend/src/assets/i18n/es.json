@@ -1,0 +1,26 @@
+{
+  "NAVBAR": {
+    "DASHBOARD": "Dashboard",
+    "PROJECTS": "Proyectos",
+    "TASKS": "Tareas",
+    "TEAM": "Equipo",
+    "TEAM_LIST": "Lista de miembros",
+    "TEAM_ADD": "Añadir un miembro",
+    "TOOLS": "Herramientas",
+    "TOOLS_DASHBOARD": "Dashboard",
+    "TOOLS_CALENDAR": "Calendario",
+    "TOOLS_NOTIFICATIONS": "Notificaciones",
+    "LOGOUT": "Cerrar sesión"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Tareas urgentes",
+    "EMPTY": "No tienes tareas urgentes 🎉",
+    "OVERDUE": "Vencida",
+    "DUE": "Vence"
+  },
+  "COMMON": {
+    "THEME_LIGHT": "Modo claro",
+    "THEME_DARK": "Modo oscuro",
+    "LANGUAGE": "Idioma"
+  }
+}

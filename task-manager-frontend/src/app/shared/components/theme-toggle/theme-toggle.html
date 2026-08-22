@@ -1,0 +1,10 @@
+<button
+  type="button"
+  class="icon-btn"
+  (click)="themeService.toggle()"
+  [attr.aria-label]="label"
+  [title]="label"
+>
+  <span class="icon" *ngIf="themeService.theme() === 'dark'">🌙</span>
+  <span class="icon" *ngIf="themeService.theme() === 'light'">☀️</span>
+</button>

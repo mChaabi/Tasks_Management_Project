@@ -4,6 +4,8 @@ import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NavbarComponent } from './shared/components/navbar/navbar';
 import { FooterComponent } from './shared/components/footer/footer';
+import { ThemeService } from './core/services/theme';
+import { LanguageService } from './core/services/language';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +15,12 @@ import { FooterComponent } from './shared/components/footer/footer';
 })
 export class App {
   private router = inject(Router);
+  private themeService = inject(ThemeService);
+  private languageService = inject(LanguageService);
+
+   ngOnInit(): void {
+    this.languageService.init();
+  }
 
   // Routes où la navbar/footer ne doivent JAMAIS apparaître
   private publicRoutes = ['/auth/login', '/auth/register'];

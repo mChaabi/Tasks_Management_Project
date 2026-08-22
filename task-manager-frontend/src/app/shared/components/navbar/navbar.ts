@@ -1,13 +1,23 @@
 import { Component, inject, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth';
 import { NotificationService } from '../services/notification';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle';
+import { LanguageSwitcherComponent } from '../language-switcher/language-switcher';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
+    TranslatePipe,
+    ThemeToggleComponent,
+    LanguageSwitcherComponent
+  ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })

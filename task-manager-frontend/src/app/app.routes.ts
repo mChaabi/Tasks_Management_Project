@@ -37,7 +37,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'projects',
+    redirectTo: 'auth',
     pathMatch: 'full'
   },
   {

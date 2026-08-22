@@ -1,76 +1,69 @@
 <nav class="navbar" *ngIf="isLoggedIn()">
   <div class="navbar-container">
 
-    <!-- Brand / Logo -->
     <div class="brand" routerLink="/projects">
       <div class="brand-logo">⚡</div>
       <span class="brand-name">TaskManager</span>
     </div>
 
-    <!-- Links de Navegación -->
     <ul class="nav-links">
-      <!-- BOUTON DASHBOARD -->
       <li>
         <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
           <span class="icon">📊</span>
-          <span>Dashboard</span>
+          <span>{{ 'NAVBAR.DASHBOARD' | translate }}</span>
         </a>
       </li>
 
       <li>
         <a routerLink="/projects" routerLinkActive="active" class="nav-item">
           <span class="icon">📁</span>
-          <span>Proyectos</span>
+          <span>{{ 'NAVBAR.PROJECTS' | translate }}</span>
         </a>
       </li>
 
       <li>
         <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
           <span class="icon">✅</span>
-          <span>Tareas</span>
+          <span>{{ 'NAVBAR.TASKS' | translate }}</span>
         </a>
       </li>
 
-      <!-- Menu Déroulant Équipe / Usuarios -->
       <li class="tools-dropdown" *ngIf="canSeeUsers()">
         <button class="tools-btn" (click)="toggleUsersMenu()" type="button" [class.active]="showUsersMenu">
           <span class="icon">👥</span>
-          <span>Équipe</span>
+          <span>{{ 'NAVBAR.TEAM' | translate }}</span>
           <span class="chevron">▾</span>
         </button>
 
-        <!-- Submenu -->
         <div class="dropdown-menu" *ngIf="showUsersMenu">
           <button class="dropdown-item" (click)="goToUsersList()">
-            <span class="icon">📋</span> Liste des membres
+            <span class="icon">📋</span> {{ 'NAVBAR.TEAM_LIST' | translate }}
           </button>
           <button class="dropdown-item" (click)="openAddUserModal()">
-            <span class="icon">➕</span> Ajouter un membre
+            <span class="icon">➕</span> {{ 'NAVBAR.TEAM_ADD' | translate }}
           </button>
         </div>
       </li>
 
-      <!-- Menú Opciones / Herramientas -->
       <li class="tools-dropdown">
         <button class="tools-btn" (click)="toggleToolsMenu()" type="button" [class.active]="showToolsMenu">
           <span class="icon">🧰</span>
-          <span>Herramientas</span>
+          <span>{{ 'NAVBAR.TOOLS' | translate }}</span>
           <span class="badge" *ngIf="notificationService.urgentCount() > 0">
             {{ notificationService.urgentCount() }}
           </span>
           <span class="chevron">▾</span>
         </button>
 
-        <!-- Dropdown Menu -->
         <div class="dropdown-menu" *ngIf="showToolsMenu">
           <button class="dropdown-item" (click)="goToDashboard()">
-            <span class="icon">📊</span> Dashboard
+            <span class="icon">📊</span> {{ 'NAVBAR.TOOLS_DASHBOARD' | translate }}
           </button>
           <button class="dropdown-item" (click)="goToCalendar()">
-            <span class="icon">📅</span> Calendario
+            <span class="icon">📅</span> {{ 'NAVBAR.TOOLS_CALENDAR' | translate }}
           </button>
           <button class="dropdown-item" (click)="openNotifications()">
-            <span class="icon">🔔</span> Notificaciones
+            <span class="icon">🔔</span> {{ 'NAVBAR.TOOLS_NOTIFICATIONS' | translate }}
             <span class="mini-badge" *ngIf="notificationService.urgentCount() > 0">
               {{ notificationService.urgentCount() }}
             </span>
@@ -79,26 +72,27 @@
       </li>
     </ul>
 
-    <!-- Acciones Usuario -->
     <div class="user-actions">
+      <app-theme-toggle></app-theme-toggle>
+      <app-language-switcher></app-language-switcher>
+
       <button class="btn-logout" (click)="logout()">
         <span class="icon">🚪</span>
-        <span>Cerrar sesión</span>
+        <span>{{ 'NAVBAR.LOGOUT' | translate }}</span>
       </button>
     </div>
 
   </div>
 
-  <!-- Panel flotante de Notificaciones -->
   <div class="notif-panel-wrapper" *ngIf="showNotifPanel">
     <div class="notif-panel">
       <div class="notif-header">
-        <h3>Tareas urgentes</h3>
+        <h3>{{ 'NOTIFICATIONS.TITLE' | translate }}</h3>
         <button class="close-btn" (click)="closeNotifPanel()">✕</button>
       </div>
 
       <div *ngIf="notificationService.urgentTasks().length === 0" class="notif-empty">
-        No tienes tareas urgentes 🎉
+        {{ 'NOTIFICATIONS.EMPTY' | translate }}
       </div>
 
       <ul class="notif-list">
@@ -108,7 +102,8 @@
           <div class="notif-content">
             <strong>{{ task.title }}</strong>
             <span class="due-date">
-              {{ notificationService.isOverdue(task) ? 'Vencida' : 'Vence' }}: {{ task.dueDate | date: 'dd/MM/yyyy' }}
+              {{ (notificationService.isOverdue(task) ? 'NOTIFICATIONS.OVERDUE' : 'NOTIFICATIONS.DUE') | translate }}:
+              {{ task.dueDate | date: 'dd/MM/yyyy' }}
             </span>
           </div>
         </li>

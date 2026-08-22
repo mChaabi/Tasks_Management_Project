@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+// src/styles.scss
+
+@import 'styles/tokens';
+
+body {
+  background: var(--bg-app);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
