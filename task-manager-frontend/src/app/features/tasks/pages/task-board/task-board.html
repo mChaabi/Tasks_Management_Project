@@ -1,0 +1,150 @@
+<div class="board-container">
+  <div class="board-header">
+    <h2>{{ 'TASKS.BOARD.TITLE' | translate }}</h2>
+
+    <div class="header-actions">
+      <select class="project-select" [(ngModel)]="selectedProjectId" (ngModelChange)="onProjectChange($event)">
+        <option *ngFor="let p of projects" [value]="p.id">{{ p.title }}</option>
+      </select>
+
+      <button class="btn-primary" (click)="openModal()" [disabled]="!projectId">
+        + {{ 'TASKS.BOARD.NEW_TASK' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="columns-grid" *ngIf="projectId; else noProject">
+    <!-- Columna PENDIENTE -->
+    <div class="column">
+      <div class="column-header todo">
+        <span>{{ 'TASKS.BOARD.COLUMN_TODO' | translate }}</span>
+        <span class="count">{{ getTasksByStatus('PENDING').length }}</span>
+      </div>
+      <div class="task-list">
+        <div *ngFor="let task of getTasksByStatus('PENDING')" class="task-card" [ngClass]="'priority-' + (task.priority || 'MEDIA').toLowerCase()">
+          <div class="card-top">
+            <h4>{{ task.title }}</h4>
+            <button class="btn-edit" (click)="openEditModal(task)">✏️</button>
+          </div>
+          <p>{{ task.description }}</p>
+          <div class="task-meta">
+            <span class="badge">{{ task.priority || 'MEDIA' }}</span>
+            <span *ngIf="task.dueDate" class="meta-item">📅 {{ task.dueDate | date: 'dd/MM/yyyy' }}</span>
+            <span *ngIf="task.assignedTo" class="meta-item">👤 {{ task.assignedTo }}</span>
+          </div>
+          <div class="card-actions">
+            <button (click)="changeStatus(task.id!, 'IN_PROGRESS')">→ {{ 'TASKS.BOARD.ACTION_IN_PROGRESS' | translate }}</button>
+            <button class="btn-del" (click)="deleteTask(task.id!)">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna EN PROGRESO -->
+    <div class="column">
+      <div class="column-header in-progress">
+        <span>{{ 'TASKS.BOARD.COLUMN_IN_PROGRESS' | translate }}</span>
+        <span class="count">{{ getTasksByStatus('IN_PROGRESS').length }}</span>
+      </div>
+      <div class="task-list">
+        <div *ngFor="let task of getTasksByStatus('IN_PROGRESS')" class="task-card" [ngClass]="'priority-' + (task.priority || 'MEDIA').toLowerCase()">
+          <div class="card-top">
+            <h4>{{ task.title }}</h4>
+            <button class="btn-edit" (click)="openEditModal(task)">✏️</button>
+          </div>
+          <p>{{ task.description }}</p>
+          <div class="task-meta">
+            <span class="badge">{{ task.priority || 'MEDIA' }}</span>
+            <span *ngIf="task.dueDate" class="meta-item">📅 {{ task.dueDate | date: 'dd/MM/yyyy' }}</span>
+            <span *ngIf="task.assignedTo" class="meta-item">👤 {{ task.assignedTo }}</span>
+          </div>
+          <div class="card-actions">
+            <button (click)="changeStatus(task.id!, 'PENDING')">← {{ 'TASKS.BOARD.ACTION_PENDING' | translate }}</button>
+            <button (click)="changeStatus(task.id!, 'COMPLETED')">→ {{ 'TASKS.BOARD.ACTION_DONE' | translate }}</button>
+            <button class="btn-del" (click)="deleteTask(task.id!)">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna COMPLETADO -->
+    <div class="column">
+      <div class="column-header done">
+        <span>{{ 'TASKS.BOARD.COLUMN_DONE' | translate }}</span>
+        <span class="count">{{ getTasksByStatus('COMPLETED').length }}</span>
+      </div>
+      <div class="task-list">
+        <div *ngFor="let task of getTasksByStatus('COMPLETED')" class="task-card" [ngClass]="'priority-' + (task.priority || 'MEDIA').toLowerCase()">
+          <div class="card-top">
+            <h4>{{ task.title }}</h4>
+            <button class="btn-edit" (click)="openEditModal(task)">✏️</button>
+          </div>
+          <p>{{ task.description }}</p>
+          <div class="task-meta">
+            <span class="badge">{{ task.priority || 'MEDIA' }}</span>
+            <span *ngIf="task.dueDate" class="meta-item">📅 {{ task.dueDate | date: 'dd/MM/yyyy' }}</span>
+            <span *ngIf="task.assignedTo" class="meta-item">👤 {{ task.assignedTo }}</span>
+          </div>
+          <div class="card-actions">
+            <button (click)="changeStatus(task.id!, 'IN_PROGRESS')">← {{ 'TASKS.BOARD.ACTION_IN_PROGRESS' | translate }}</button>
+            <button class="btn-del" (click)="deleteTask(task.id!)">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noProject>
+    <div class="empty-state">
+      {{ 'TASKS.BOARD.SELECT_PROJECT' | translate }}
+    </div>
+  </ng-template>
+
+  <!-- Modal Crear/Editar Tarea -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h3>{{ editingTaskId ? ('TASKS.BOARD.MODAL_EDIT_TITLE' | translate) : ('TASKS.BOARD.MODAL_TITLE' | translate) }}</h3>
+      <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
+        <div class="form-group">
+          <label>{{ 'TASKS.TABLE.TITLE' | translate }}</label>
+          <input type="text" formControlName="title" [placeholder]="'TASKS.BOARD.FIELD_TITLE_PLACEHOLDER' | translate" />
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'TASKS.TABLE.DESCRIPTION' | translate }}</label>
+          <textarea formControlName="description" rows="3" [placeholder]="'TASKS.BOARD.FIELD_DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>{{ 'TASKS.TABLE.PRIORITY' | translate }}</label>
+            <select formControlName="priority">
+              <option value="BAJA">{{ 'TASKS.PRIORITY.LOW' | translate }}</option>
+              <option value="MEDIA">{{ 'TASKS.PRIORITY.MEDIUM' | translate }}</option>
+              <option value="ALTA">{{ 'TASKS.PRIORITY.HIGH' | translate }}</option>
+              <option value="URGENTE">{{ 'TASKS.PRIORITY.URGENT' | translate }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'TASKS.TABLE.DUE_DATE' | translate }}</label>
+            <input type="date" formControlName="dueDate" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'TASKS.TABLE.ASSIGNED_TO' | translate }}</label>
+          <select formControlName="assignedTo">
+            <option value="">{{ 'TASKS.BOARD.UNASSIGNED' | translate }}</option>
+            <option *ngFor="let u of users" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="closeModal()">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button type="submit" class="btn-primary" [disabled]="taskForm.invalid">{{ 'COMMON.SAVE' | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

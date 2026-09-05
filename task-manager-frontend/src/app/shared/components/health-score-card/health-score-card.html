@@ -1,0 +1,31 @@
+<!-- shared/components/health-score-card/health-score-card.html -->
+<div class="health-card" [ngClass]="riskClass()">
+
+  <div *ngIf="isLoading()" class="health-loading">
+    <div class="spinner-sm"></div>
+    <span>{{ 'PROJECTS.HEALTH.ANALYZING' | translate }}</span>
+  </div>
+
+  <div *ngIf="errorMessage()" class="health-error">
+    ⚠️ {{ errorMessage() | translate }}
+  </div>
+
+  <div *ngIf="!isLoading() && health() as h" class="health-content">
+    <div class="health-score-circle">
+      <span class="score-number">{{ h.score }}</span>
+      <span class="score-max">/100</span>
+    </div>
+
+    <div class="health-details">
+      <span class="risk-badge" [ngClass]="riskClass()">
+        {{ 'PROJECTS.HEALTH.RISK.' + h.riskLevel | translate }}
+      </span>
+      <p class="health-summary">{{ h.summary }}</p>
+
+      <ul class="health-risks" *ngIf="h.risks.length > 0">
+        <li *ngFor="let risk of h.risks">⚠️ {{ risk }}</li>
+      </ul>
+    </div>
+  </div>
+
+</div>

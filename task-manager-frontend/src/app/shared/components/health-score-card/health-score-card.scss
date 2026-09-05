@@ -1,0 +1,55 @@
+// shared/components/health-score-card/health-score-card.scss
+.health-card {
+  background: #1a1f35;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid #64748b; // default
+
+  &.low    { border-left-color: #22c55e; }
+  &.medium { border-left-color: #f59e0b; }
+  &.high   { border-left-color: #ef4444; }
+}
+
+.health-content {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.health-score-circle {
+  display: flex;
+  align-items: baseline;
+  font-weight: 800;
+
+  .score-number { font-size: 2.5rem; color: #fff; }
+  .score-max { font-size: 1rem; color: #94a3b8; margin-left: 2px; }
+}
+
+.risk-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  &.low    { background: rgba(34,197,94,0.15); color: #22c55e; }
+  &.medium { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  &.high   { background: rgba(239,68,68,0.15); color: #ef4444; }
+}
+
+.health-summary { color: #cbd5e1; margin: 0.5rem 0; }
+
+.health-risks {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.875rem;
+  color: #f59e0b;
+}
+
+.health-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #94a3b8;
+}

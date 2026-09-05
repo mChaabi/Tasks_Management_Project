@@ -1,0 +1,33 @@
+<!-- 1. Vista si el proyecto existe y terminó de cargar -->
+<div class="detail-container" *ngIf="!isLoading && project">
+  <a routerLink="/projects" class="back-link">
+    ← {{ 'PROJECTS.DETAIL.BACK_LINK' | translate }}
+  </a>
+
+  <div class="detail-card">
+    <div class="detail-header">
+      <h1>{{ project?.title }}</h1>
+      <span class="status-badge" [ngClass]="(project?.status || 'PLANNED').toLowerCase()">
+        {{ 'PROJECTS.STATUS.' + (project?.status || 'PLANNED') | translate }}
+      </span>
+    </div>
+    <p class="description">{{ project?.description }}</p>
+
+    <app-health-score-card *ngIf="project?.id" [projectId]="project.id"></app-health-score-card>
+  </div>
+
+  <div class="tasks-section" *ngIf="project?.id">
+    <app-task-board [projectId]="project.id"></app-task-board>
+  </div>
+</div>
+
+<!-- 2. Spinner de carga mientras responde el backend -->
+<div *ngIf="isLoading" style="padding: 2rem; color: white; text-align: center;">
+  <p>Cargando proyecto...</p>
+</div>
+
+<!-- 3. Mensaje si terminó la carga pero no se encontró el proyecto -->
+<div *ngIf="!isLoading && !project" style="padding: 2rem; color: white; text-align: center;">
+  <h2>⚠️ No se encontró el proyecto</h2>
+  <a routerLink="/projects" style="color: #6366f1;">← Volver a la lista de proyectos</a>
+</div>

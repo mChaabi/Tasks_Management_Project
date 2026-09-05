@@ -1,0 +1,197 @@
+{
+  "NAVBAR": {
+    "DASHBOARD": "Tableau de bord",
+    "PROJECTS": "Projets",
+    "TASKS": "Tâches",
+    "TASKS_LIST": "Liste des tâches",
+    "TASKS_PLAN": "Planifier les tâches",
+    "TEAM": "Équipe",
+    "TEAM_LIST": "Liste des membres",
+    "TEAM_ADD": "Ajouter un membre",
+    "TOOLS": "Outils",
+    "TOOLS_DASHBOARD": "Tableau de bord",
+    "TOOLS_CALENDAR": "Calendrier",
+    "TOOLS_NOTIFICATIONS": "Notifications",
+    "LOGOUT": "Déconnexion"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Tâches urgentes",
+    "EMPTY": "Aucune tâche urgente 🎉",
+    "OVERDUE": "En retard",
+    "DUE": "À échéance"
+  },
+  "COMMON": {
+    "RETRY": "Réessayer",
+    "CLOSE": "Fermer",
+    "THEME_LIGHT": "Mode clair",
+    "THEME_DARK": "Mode sombre",
+    "LANGUAGE": "Langue",
+    "CANCEL": "Annuler",
+    "SAVE": "Enregistrer",
+    "EDIT": "Éditer",
+    "DELETE": "Supprimer",
+    "VIEW": "Voir",
+    "PREVIOUS": "Précédent",
+    "NEXT": "Suivant",
+    "PAGE_OF": "Page {{current}} sur {{total}}",
+    "ALL_RIGHTS_RESERVED": "Tous droits réservés"
+  },
+  "DASHBOARD": {
+    "TITLE": "Tableau de bord & Statistiques",
+    "LOADING": "Chargement des statistiques...",
+    "TOTAL_PROJECTS": "Projets totaux",
+    "TASKS_CREATED": "Tâches créées",
+    "COMMENTS": "Commentaires",
+    "REGISTERED_USERS": "Utilisateurs enregistrés"
+  },
+  "PROJECTS": {
+    "TITLE": "Gestion de Projets",
+    "SUBTITLE": "Liste générale des projets et de leurs actions",
+    "EXPORT_EXCEL": "Excel",
+    "EXPORT_EXCEL_TITLE": "Exporter en Excel",
+    "EXPORT_PDF": "PDF",
+    "EXPORT_PDF_TITLE": "Exporter en PDF",
+    "IMPORT_EXCEL": "Importer Excel",
+    "IMPORT_TITLE": "Importer des projets",
+    "NEW_PROJECT": "Nouveau Projet",
+    "EMPTY_STATE": "Aucun projet enregistré. Créez le premier !",
+    "MODAL_EDIT_TITLE": "Modifier le Projet",
+    "SAVE_CHANGES": "Enregistrer les modifications",
+    "VIEW_DETAILS": "Voir les détails",
+    "VIEW_TASKS": "Voir les tâches",
+    "TABLE": {
+      "ID": "ID",
+      "TITLE": "Titre",
+      "DESCRIPTION": "Description",
+      "STATUS": "Statut",
+      "ACTIONS": "Actions"
+    },
+    "STATUS": {
+      "PLANNED": "Planifié",
+      "IN_PROGRESS": "En cours",
+      "COMPLETED": "Terminé"
+    },
+    "VALIDATION": {
+      "TITLE_REQUIRED": "Le titre est obligatoire (3 caractères minimum).",
+      "DESCRIPTION_REQUIRED": "La description est obligatoire."
+    },
+    "DETAIL": {
+      "BACK_LINK": "← Retour aux projets",
+      "NOT_FOUND": "Ce projet n'existe pas ou a été supprimé.",
+      "BACK_TO_LIST": "Retour à la liste"
+    },
+    "MODAL_CREATE": {
+      "TITLE": "Créer un nouveau projet",
+      "FIELD_TITLE": "Titre",
+      "FIELD_TITLE_PLACEHOLDER": "Nom du projet",
+      "FIELD_DESCRIPTION": "Description",
+      "FIELD_DESCRIPTION_PLACEHOLDER": "Détails du projet",
+      "FIELD_STATUS": "Statut"
+    },
+    "HEALTH": {
+      "ANALYZING": "Analyse de la santé du projet...",
+      "LOAD_ERROR": "Impossible d'analyser la santé du projet.",
+      "RISK": {
+        "LOW": "Risque faible",
+        "MEDIUM": "Risque moyen",
+        "HIGH": "Risque élevé"
+      }
+    }
+  },
+  "TASKS": {
+    "LIST_TITLE": "Liste des tâches",
+    "UNASSIGNED": "Non assigné",
+    "EMPTY_STATE": "Aucune tâche disponible.",
+    "LOADING": "Chargement des tâches...",
+    "TABLE": {
+      "TITLE": "Titre",
+      "DESCRIPTION": "Description",
+      "STATUS": "Statut",
+      "ASSIGNED_TO": "Assigné à",
+      "DUE_DATE": "Date d'échéance"
+    },
+    "STATUS": {
+      "PENDING": "En attente",
+      "IN_PROGRESS": "En cours",
+      "COMPLETED": "Terminé"
+    },
+    "BOARD": {
+      "TITLE": "Tableau des tâches",
+      "NEW_TASK": "Nouvelle tâche",
+      "COLUMN_TODO": "À FAIRE",
+      "COLUMN_IN_PROGRESS": "EN COURS",
+      "COLUMN_DONE": "TERMINÉ",
+      "ACTION_PENDING": "En attente",
+      "ACTION_IN_PROGRESS": "En cours",
+      "ACTION_DONE": "Terminé",
+      "MODAL_TITLE": "Nouvelle tâche",
+      "FIELD_TITLE_PLACEHOLDER": "Titre de la tâche",
+      "FIELD_DESCRIPTION_PLACEHOLDER": "Détails..."
+    }
+  },
+  "TEAM": {
+    "TITLE": "Équipe",
+    "MEMBERS_COUNT": "{{count}} membres",
+    "SEARCH_PLACEHOLDER": "Rechercher un membre, un rôle...",
+    "ADD_MEMBER": "Ajouter un membre",
+    "LOAD_ERROR": "Impossible de charger les membres",
+    "LOADING_DETAIL": "Chargement du détail…",
+    "PROJECTS_COUNT": "Projets ({{count}})",
+    "RECENT_TASKS_COUNT": "Tâches récentes ({{count}})",
+    "NO_PROJECTS_TASKS": "Aucun projet ni tâche assignée pour le moment.",
+    "NO_MATCH": "Aucun membre ne correspond à « {{term}} »",
+    "TABLE": {
+      "MEMBER": "Membre",
+      "EMAIL": "Email",
+      "ROLE": "Rôle",
+      "PROJECTS": "Projets",
+      "TASKS": "Tâches"
+    },
+    "ROLE": {
+      "DEVELOPER": "Développeur",
+      "MANAGER": "Manager",
+      "ADMIN": "Admin"
+    },
+    "MODAL_ADD": {
+      "TITLE": "Ajouter un nouveau membre",
+      "FULL_NAME": "Nom complet",
+      "FULL_NAME_PLACEHOLDER": "Ex: Jean Dupont",
+      "EMAIL": "Email",
+      "EMAIL_PLACEHOLDER": "jean@test.com",
+      "PASSWORD": "Mot de passe",
+      "ROLE": "Rôle",
+      "SUBMIT": "Créer le membre",
+      "SUBMITTING": "Création..."
+    }
+  },
+  "CALENDAR": {
+    "MONTHS": {
+      "JANUARY": "Janvier",
+      "FEBRUARY": "Février",
+      "MARCH": "Mars",
+      "APRIL": "Avril",
+      "MAY": "Mai",
+      "JUNE": "Juin",
+      "JULY": "Juillet",
+      "AUGUST": "Août",
+      "SEPTEMBER": "Septembre",
+      "OCTOBER": "Octobre",
+      "NOVEMBER": "Novembre",
+      "DECEMBER": "Décembre"
+    },
+    "WEEKDAYS": {
+      "MON": "Lun",
+      "TUE": "Mar",
+      "WED": "Mer",
+      "THU": "Jeu",
+      "FRI": "Ven",
+      "SAT": "Sam",
+      "SUN": "Dim"
+    },
+    "ITEMS_FOR_DATE": "Éléments du {{date}}",
+    "ITEM_TYPE": {
+      "PROJECT": "Projet",
+      "TASK": "Tâche"
+    }
+  }
+}

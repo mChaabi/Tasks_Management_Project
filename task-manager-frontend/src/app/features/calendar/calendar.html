@@ -1,0 +1,46 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <button (click)="prevMonth()">‹</button>
+    <h2>{{ monthLabel() }}</h2>
+    <button (click)="nextMonth()">›</button>
+  </div>
+
+  <div class="weekdays-row">
+    <span *ngFor="let d of weekDays()">{{ d }}</span>
+  </div>
+
+  <div class="days-grid">
+    <div
+      *ngFor="let day of calendarDays()"
+      class="day-cell"
+      [class.out-month]="!day.inCurrentMonth"
+      [class.today]="day.isToday"
+      [class.has-tasks]="day.items.length > 0"
+      (click)="selectDay(day)">
+      <span class="day-number">{{ day.date.getDate() }}</span>
+      
+      <div class="task-dots" *ngIf="day.items.length > 0">
+        <span
+          class="dot"
+          *ngFor="let item of day.items.slice(0, 3)"
+          [class.dot-project]="item.type === 'PROJECT'"
+          [class.dot-task]="item.type === 'TASK'">
+        </span>
+        <span class="more" *ngIf="day.items.length > 3">+{{ day.items.length - 3 }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Détail du jour sélectionné -->
+  <div class="day-detail" *ngIf="selectedDay()">
+    <h3>{{ 'CALENDAR.ITEMS_FOR_DATE' | translate: { date: (selectedDay()!.date | date:'dd/MM/yyyy':undefined:currentLocale) } }}</h3>
+    <ul>
+      <li *ngFor="let item of selectedDay()!.items" (click)="onItemClick(item)">
+        <span>{{ item.type === 'PROJECT' ? '📁' : '📋' }} <strong>{{ item.title }}</strong></span>
+        <span class="status-badge" [class.project-tag]="item.type === 'PROJECT'">
+          {{ 'CALENDAR.ITEM_TYPE.' + item.type | translate }} - {{ 'PROJECTS.STATUS.' + (item.status || 'PLANNED') | translate }}
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>

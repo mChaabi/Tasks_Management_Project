@@ -1,0 +1,27 @@
+<div class="lang-switch">
+  <button
+    type="button"
+    class="icon-btn"
+    [class.active]="open"
+    (click)="toggle()"
+    [attr.aria-label]="'COMMON.LANGUAGE' | translate"
+    [attr.aria-expanded]="open"
+  >
+    <span class="flag">{{ current.flag }}</span>
+    <span class="code">{{ current.code | uppercase }}</span>
+  </button>
+
+  <div class="lang-menu" *ngIf="open">
+    <button
+      type="button"
+      class="lang-item"
+      *ngFor="let opt of options"
+      [class.selected]="opt.code === languageService.current()"
+      (click)="select(opt.code)"
+    >
+      <span class="flag">{{ opt.flag }}</span>
+      <span>{{ opt.label }}</span>
+      <span class="check" *ngIf="opt.code === languageService.current()">✓</span>
+    </button>
+  </div>
+</div>

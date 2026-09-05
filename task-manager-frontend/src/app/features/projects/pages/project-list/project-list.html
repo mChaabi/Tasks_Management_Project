@@ -1,0 +1,137 @@
+<div class="projects-container">
+  <div class="header">
+    <div>
+      <h1>{{ 'PROJECTS.TITLE' | translate }}</h1>
+      <p>{{ 'PROJECTS.SUBTITLE' | translate }}</p>
+    </div>
+    <!-- Botones de Exportar / Importar -->
+    <div class="export-group">
+      <button class="btn-action-outline" (click)="exportExcel()" [title]="'PROJECTS.EXPORT_EXCEL_TITLE' | translate">
+        📊 {{ 'PROJECTS.EXPORT_EXCEL' | translate }}
+      </button>
+      <button class="btn-action-outline" (click)="exportPdf()" [title]="'PROJECTS.EXPORT_PDF_TITLE' | translate">
+        📄 {{ 'PROJECTS.EXPORT_PDF' | translate }}
+      </button>
+
+      <label class="btn-action-outline import-btn" [title]="'PROJECTS.IMPORT_TITLE' | translate">
+        📥 {{ 'PROJECTS.IMPORT_EXCEL' | translate }}
+        <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" hidden />
+      </label>
+    </div>
+    <button class="btn-primary" (click)="openModal()">+ {{ 'PROJECTS.NEW_PROJECT' | translate }}</button>
+  </div>
+
+  <!-- Bannière d'erreur globale (chargement / suppression) -->
+  <div class="error-banner" *ngIf="errorMessage">
+    ⚠️ {{ errorMessage }}
+    <button (click)="errorMessage = null">✕</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loader-container">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="!isLoading" class="table-wrapper">
+    <div *ngIf="allProjects.length === 0" class="empty-state">
+      <p>{{ 'PROJECTS.EMPTY_STATE' | translate }}</p>
+    </div>
+
+    <table *ngIf="allProjects.length > 0" class="projects-table">
+      <thead>
+        <tr>
+          <th>{{ 'PROJECTS.TABLE.ID' | translate }}</th>
+          <th>{{ 'PROJECTS.TABLE.TITLE' | translate }}</th>
+          <th>{{ 'PROJECTS.TABLE.DESCRIPTION' | translate }}</th>
+          <th>{{ 'PROJECTS.TABLE.STATUS' | translate }}</th>
+          <th>{{ 'PROJECTS.TABLE.ACTIONS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let project of projects">
+          <td>#{{ project.id }}</td>
+          <td class="font-bold">{{ project.title }}</td>
+          <td class="desc-cell">{{ project.description }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="(project.status || 'PLANNED').toLowerCase()">
+              {{ 'PROJECTS.STATUS.' + (project.status || 'PLANNED') | translate }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <!-- ❌ ANTES (Ruta absoluta global): [routerLink]="['/projects', project.id]" -->
+            <!-- ✔️ AHORA (Ruta relativa directa o array de segmentos): -->
+            <a [routerLink]="[project.id]" class="btn-action view">
+              👁️ {{ 'COMMON.VIEW' | translate }}
+            </a>
+
+            <!-- Ir directo a las tareas del proyecto -->
+            <a [routerLink]="[project.id, 'tasks']" class="btn-action tasks">
+              📋 {{ 'PROJECTS.VIEW_TASKS' | translate }}
+            </a>
+
+            <button class="btn-action edit" (click)="openEditModal(project, $event)">
+              ✏️ {{ 'COMMON.EDIT' | translate }}
+            </button>
+            <button class="btn-action delete" (click)="deleteProject(project.id!, $event)">
+              🗑️ {{ 'COMMON.DELETE' | translate }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">‹ {{ 'COMMON.PREVIOUS' | translate }}</button>
+      <button *ngFor="let p of pagesArray" [class.active]="p === currentPage" (click)="goToPage(p)">{{ p }}</button>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">{{ 'COMMON.NEXT' | translate }} ›</button>
+    </div>
+  </div>
+
+  <!-- Modal Crear Proyecto -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h2>{{ (editingProject ? 'PROJECTS.MODAL_EDIT_TITLE' : 'PROJECTS.MODAL_CREATE.TITLE') | translate }}</h2>
+
+      <!-- Erreur spécifique à la création, à l'intérieur du modal -->
+      <div class="error-banner modal-error" *ngIf="errorMessage">
+        ⚠️ {{ errorMessage }}
+        <button (click)="errorMessage = null">✕</button>
+      </div>
+
+      <form [formGroup]="projectForm" (ngSubmit)="saveProject()">
+        <div class="form-group">
+          <label>{{ 'PROJECTS.MODAL_CREATE.FIELD_TITLE' | translate }}</label>
+          <input type="text" formControlName="title"
+            [placeholder]="'PROJECTS.MODAL_CREATE.FIELD_TITLE_PLACEHOLDER' | translate" />
+          <small class="field-error" *ngIf="projectForm.get('title')?.touched && projectForm.get('title')?.invalid">
+            {{ 'PROJECTS.VALIDATION.TITLE_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'PROJECTS.MODAL_CREATE.FIELD_DESCRIPTION' | translate }}</label>
+          <textarea formControlName="description" rows="3"
+            [placeholder]="'PROJECTS.MODAL_CREATE.FIELD_DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+          <small class="field-error"
+            *ngIf="projectForm.get('description')?.touched && projectForm.get('description')?.invalid">
+            {{ 'PROJECTS.VALIDATION.DESCRIPTION_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'PROJECTS.MODAL_CREATE.FIELD_STATUS' | translate }}</label>
+          <select formControlName="status">
+            <option value="PLANNED">{{ 'PROJECTS.STATUS.PLANNED' | translate }}</option>
+            <option value="IN_PROGRESS">{{ 'PROJECTS.STATUS.IN_PROGRESS' | translate }}</option>
+            <option value="COMPLETED">{{ 'PROJECTS.STATUS.COMPLETED' | translate }}</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="closeModal()">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button type="submit" class="btn-primary" [disabled]="projectForm.invalid">
+            {{ (editingProject ? 'PROJECTS.SAVE_CHANGES' : 'COMMON.SAVE') | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

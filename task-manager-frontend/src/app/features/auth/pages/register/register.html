@@ -1,0 +1,65 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Créer un compte</h2>
+      <p>Rejoignez-nous pour gérer vos projets efficacement.</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert-error">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="name">Nom complet</label>
+        <input 
+          id="name" 
+          type="text" 
+          formControlName="name" 
+          placeholder="John Doe"
+          [class.invalid]="registerForm.get('name')?.touched && registerForm.get('name')?.invalid"
+        />
+        <small class="error-text" *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.errors?.['required']">
+          Le nom est requis.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Adresse Email</label>
+        <input 
+          id="email" 
+          type="email" 
+          formControlName="email" 
+          placeholder="nom@exemple.com"
+          [class.invalid]="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+        />
+        <small class="error-text" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']">
+          Veuillez saisir un email valide.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input 
+          id="password" 
+          type="password" 
+          formControlName="password" 
+          placeholder="••••••••"
+          [class.invalid]="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+        />
+        <small class="error-text" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['minLength']">
+          Le mot de passe doit contenir au moins 6 caractères.
+        </small>
+      </div>
+
+      <button type="submit" class="btn-submit" [disabled]="isLoading">
+        <span *ngIf="!isLoading">S'inscrire</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Déjà un compte ? <a routerLink="/auth/login">Se connecter</a></p>
+    </div>
+  </div>
+</div>

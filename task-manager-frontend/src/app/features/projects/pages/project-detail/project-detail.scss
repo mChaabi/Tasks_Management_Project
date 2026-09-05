@@ -1,0 +1,117 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #0f172a;
+  padding: 2rem;
+}
+
+.detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-link {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #818cf8;
+  }
+}
+
+.detail-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h1 {
+      color: #f8fafc;
+      margin: 0;
+      font-size: 2rem;
+    }
+  }
+
+  .description {
+    color: #94a3b8;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.tasks-section {
+  margin-top: 2rem;
+}
+
+.detail-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #f8fafc;
+}
+
+.back-link {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  &:hover { text-decoration: underline; }
+}
+
+.detail-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #ffffff;
+    }
+  }
+
+  .description {
+    color: #94a3b8;
+    margin-top: 1rem;
+    font-size: 1rem;
+  }
+}
+
+.status-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  &.planned { background: rgba(99, 102, 241, 0.25); color: #a5b4fc; }
+  &.in_progress { background: rgba(245, 158, 11, 0.25); color: #fde047; }
+  &.completed { background: rgba(16, 185, 129, 0.25); color: #6ee7b7; }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  color: #ffffff;
+
+  p { margin-bottom: 1rem; font-size: 1.2rem; }
+}

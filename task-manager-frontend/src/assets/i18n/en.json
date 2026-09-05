@@ -1,0 +1,197 @@
+{
+  "NAVBAR": {
+    "DASHBOARD": "Dashboard",
+    "PROJECTS": "Projects",
+    "TASKS": "Tasks",
+    "TASKS_LIST": "Tasks List",
+  "TASKS_PLAN": "Plan Tasks",
+    "TEAM": "Team",
+    "TEAM_LIST": "Member list",
+    "TEAM_ADD": "Add a member",
+    "TOOLS": "Tools",
+    "TOOLS_DASHBOARD": "Dashboard",
+    "TOOLS_CALENDAR": "Calendar",
+    "TOOLS_NOTIFICATIONS": "Notifications",
+    "LOGOUT": "Log out"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Urgent tasks",
+    "EMPTY": "No urgent tasks 🎉",
+    "OVERDUE": "Overdue",
+    "DUE": "Due"
+  },
+  "COMMON": {
+    "RETRY": "Retry",
+    "CLOSE": "Close",
+    "THEME_LIGHT": "Light mode",
+    "THEME_DARK": "Dark mode",
+    "LANGUAGE": "Language",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "VIEW": "View",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "PAGE_OF": "Page {{current}} of {{total}}",
+    "ALL_RIGHTS_RESERVED": "All rights reserved"
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard & Statistics",
+    "LOADING": "Loading statistics...",
+    "TOTAL_PROJECTS": "Total Projects",
+    "TASKS_CREATED": "Tasks Created",
+    "COMMENTS": "Comments",
+    "REGISTERED_USERS": "Registered Users"
+  },
+  "PROJECTS": {
+    "TITLE": "Project Management",
+    "SUBTITLE": "General list of projects and their actions",
+    "EXPORT_EXCEL": "Excel",
+    "EXPORT_EXCEL_TITLE": "Export to Excel",
+    "EXPORT_PDF": "PDF",
+    "EXPORT_PDF_TITLE": "Export to PDF",
+    "IMPORT_EXCEL": "Import Excel",
+    "IMPORT_TITLE": "Import projects",
+    "NEW_PROJECT": "New Project",
+    "EMPTY_STATE": "No projects registered. Create the first one!",
+    "MODAL_EDIT_TITLE": "Edit Project",
+    "SAVE_CHANGES": "Save Changes",
+    "VIEW_DETAILS": "View Details",
+    "VIEW_TASKS": "View Tasks",
+    "TABLE": {
+      "ID": "ID",
+      "TITLE": "Title",
+      "DESCRIPTION": "Description",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    },
+    "STATUS": {
+      "PLANNED": "Planned",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed"
+    },
+    "VALIDATION": {
+      "TITLE_REQUIRED": "Title is required (minimum 3 characters).",
+      "DESCRIPTION_REQUIRED": "Description is required."
+    },
+    "DETAIL": {
+      "BACK_LINK": "← Back to projects",
+      "NOT_FOUND": "This project doesn't exist or was deleted.",
+      "BACK_TO_LIST": "Back to list"
+    },
+    "MODAL_CREATE": {
+      "TITLE": "Create New Project",
+      "FIELD_TITLE": "Title",
+      "FIELD_TITLE_PLACEHOLDER": "Project name",
+      "FIELD_DESCRIPTION": "Description",
+      "FIELD_DESCRIPTION_PLACEHOLDER": "Project details",
+      "FIELD_STATUS": "Status"
+    },
+    "HEALTH": {
+      "ANALYZING": "Analyzing project health...",
+      "LOAD_ERROR": "Unable to analyze project health.",
+      "RISK": {
+        "LOW": "Low risk",
+        "MEDIUM": "Medium risk",
+        "HIGH": "High risk"
+      }
+    }
+  },
+  "TASKS": {
+    "LIST_TITLE": "Task List",
+    "UNASSIGNED": "Unassigned",
+    "EMPTY_STATE": "No tasks available.",
+    "LOADING": "Loading tasks...",
+    "TABLE": {
+      "TITLE": "Title",
+      "DESCRIPTION": "Description",
+      "STATUS": "Status",
+      "ASSIGNED_TO": "Assigned to",
+      "DUE_DATE": "Due date"
+    },
+    "STATUS": {
+      "PENDING": "Pending",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed"
+    },
+    "BOARD": {
+      "TITLE": "Task Board",
+      "NEW_TASK": "New Task",
+      "COLUMN_TODO": "TO DO",
+      "COLUMN_IN_PROGRESS": "IN PROGRESS",
+      "COLUMN_DONE": "DONE",
+      "ACTION_PENDING": "Pending",
+      "ACTION_IN_PROGRESS": "In progress",
+      "ACTION_DONE": "Done",
+      "MODAL_TITLE": "New Task",
+      "FIELD_TITLE_PLACEHOLDER": "Task title",
+      "FIELD_DESCRIPTION_PLACEHOLDER": "Details..."
+    }
+  },
+  "TEAM": {
+    "TITLE": "Team",
+    "MEMBERS_COUNT": "{{count}} members",
+    "SEARCH_PLACEHOLDER": "Search a member, a role...",
+    "ADD_MEMBER": "Add a member",
+    "LOAD_ERROR": "Unable to load members",
+    "LOADING_DETAIL": "Loading details…",
+    "PROJECTS_COUNT": "Projects ({{count}})",
+    "RECENT_TASKS_COUNT": "Recent tasks ({{count}})",
+    "NO_PROJECTS_TASKS": "No project or task assigned yet.",
+    "NO_MATCH": "No member matches \"{{term}}\"",
+    "TABLE": {
+      "MEMBER": "Member",
+      "EMAIL": "Email",
+      "ROLE": "Role",
+      "PROJECTS": "Projects",
+      "TASKS": "Tasks"
+    },
+    "ROLE": {
+      "DEVELOPER": "Developer",
+      "MANAGER": "Manager",
+      "ADMIN": "Admin"
+    },
+    "MODAL_ADD": {
+      "TITLE": "Add a new member",
+      "FULL_NAME": "Full name",
+      "FULL_NAME_PLACEHOLDER": "E.g. Jean Dupont",
+      "EMAIL": "Email",
+      "EMAIL_PLACEHOLDER": "jean@test.com",
+      "PASSWORD": "Password",
+      "ROLE": "Role",
+      "SUBMIT": "Create member",
+      "SUBMITTING": "Creating..."
+    }
+  },
+  "CALENDAR": {
+    "MONTHS": {
+      "JANUARY": "January",
+      "FEBRUARY": "February",
+      "MARCH": "March",
+      "APRIL": "April",
+      "MAY": "May",
+      "JUNE": "June",
+      "JULY": "July",
+      "AUGUST": "August",
+      "SEPTEMBER": "September",
+      "OCTOBER": "October",
+      "NOVEMBER": "November",
+      "DECEMBER": "December"
+    },
+    "WEEKDAYS": {
+      "MON": "Mon",
+      "TUE": "Tue",
+      "WED": "Wed",
+      "THU": "Thu",
+      "FRI": "Fri",
+      "SAT": "Sat",
+      "SUN": "Sun"
+    },
+    "ITEMS_FOR_DATE": "Items for {{date}}",
+    "ITEM_TYPE": {
+      "PROJECT": "Project",
+      "TASK": "Task"
+    }
+  }
+}

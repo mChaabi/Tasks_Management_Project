@@ -1,0 +1,77 @@
+<div class="modal-backdrop" (click)="close.emit()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>{{ 'TEAM.MODAL_ADD.TITLE' | translate }}</h3>
+      <button type="button" class="btn-close" (click)="close.emit()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label for="name">{{ 'TEAM.MODAL_ADD.FULL_NAME' | translate }}</label>
+          <input 
+            type="text" 
+            id="name" 
+            [(ngModel)]="newUser.name" 
+            name="name" 
+            required 
+            [placeholder]="'TEAM.MODAL_ADD.FULL_NAME_PLACEHOLDER' | translate" 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">{{ 'TEAM.MODAL_ADD.EMAIL' | translate }}</label>
+          <input 
+            type="email" 
+            id="email" 
+            [(ngModel)]="newUser.email" 
+            name="email" 
+            required 
+            [placeholder]="'TEAM.MODAL_ADD.EMAIL_PLACEHOLDER' | translate" 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">{{ 'TEAM.MODAL_ADD.PASSWORD' | translate }}</label>
+          <input 
+            type="password" 
+            id="password" 
+            [(ngModel)]="newUser.password" 
+            name="password" 
+            required 
+            placeholder="••••••••" 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="role">{{ 'TEAM.MODAL_ADD.ROLE' | translate }}</label>
+          <select id="role" [(ngModel)]="newUser.role" name="role" required>
+            <option [ngValue]="Role.DEVELOPER">{{ 'TEAM.ROLE.DEVELOPER' | translate }}</option>
+            <option [ngValue]="Role.MANAGER">{{ 'TEAM.ROLE.MANAGER' | translate }}</option>
+            <option [ngValue]="Role.ADMIN">{{ 'TEAM.ROLE.ADMIN' | translate }}</option>
+          </select>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-banner">
+          {{ errorMessage }}
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="close.emit()">{{ 'COMMON.CANCEL' | translate }}</button>
+        <button type="submit" class="btn-primary" [disabled]="!userForm.form.valid || submitting">
+          {{ (submitting ? 'TEAM.MODAL_ADD.SUBMITTING' : 'TEAM.MODAL_ADD.SUBMIT') | translate }}
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

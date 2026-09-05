@@ -1,0 +1,40 @@
+<div class="list-container">
+  <h2>{{ 'TASKS.LIST_TITLE' | translate }}</h2>
+
+  <ng-container *ngIf="tasks$ | async as tasks; else loadingOrError">
+    <div class="table-wrapper" *ngIf="tasks.length > 0; else emptyState">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ 'TASKS.TABLE.TITLE' | translate }}</th>
+            <th>{{ 'TASKS.TABLE.DESCRIPTION' | translate }}</th>
+            <th>{{ 'TASKS.TABLE.STATUS' | translate }}</th>
+            <th>{{ 'TASKS.TABLE.ASSIGNED_TO' | translate }}</th>
+            <th>{{ 'TASKS.TABLE.DUE_DATE' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>
+              <span class="badge" [ngClass]="task.status?.toLowerCase()">
+                {{ 'TASKS.STATUS.' + task.status | translate }}
+              </span>
+            </td>
+            <td>{{ task.assignedUser?.name || ('TASKS.UNASSIGNED' | translate) }}</td>
+            <td>{{ task.dueDate | date: 'dd/MM/yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #emptyState>
+      <p>{{ 'TASKS.EMPTY_STATE' | translate }}</p>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadingOrError>
+    <div>{{ 'TASKS.LOADING' | translate }}</div>
+  </ng-template>
+</div>
